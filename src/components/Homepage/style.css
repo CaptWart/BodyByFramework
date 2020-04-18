@@ -1,0 +1,67 @@
+.frontBox{
+    height: 600px;
+    width: 800px;
+    background-color: white;
+    position: absolute;
+    left: 50%;
+    margin-left: -400px;
+    z-index: 1;
+    top: 30px;
+    animation: grow 2s;
+    text-align: center;
+    opacity: 80%;
+}
+.mainbox{
+    height: 660px;
+    width: 1400px;
+    position: relative;
+    margin: auto;
+}
+
+.section{
+    background-image: url('background.jpg');
+}
+
+.climb{
+    animation: slideRight 800ms;
+    position: relative;
+    left: 80px;
+}
+@keyframes slideRight{
+    from {
+        left: -20px;
+        opacity: 0%;
+    }
+    to {
+        left: 80px;
+    }
+  }
+
+.run{
+    animation: slideleft 800ms;
+    position: relative;
+    left: -80px;
+}
+@keyframes slideleft{
+    from {
+        left: 20px;
+        opacity: 0%;
+    }
+    to {
+        left: -80px;
+    }
+  }
+@keyframes grow{
+    0%{
+        transform: scale(.8);
+        opacity: 0;
+    }
+    40%{        
+        opacity: 0;
+    }
+    100%{
+        transform: scale(1);
+        opacity: 80%;
+    }
+
+}
