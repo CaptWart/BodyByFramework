@@ -2,6 +2,7 @@ import React from 'react';
 import run from './run.jpg';
 import climb from './climb.jpg';
 import './style.css';
+import { Link } from "react-router-dom";
 
 function FirstSection(){
     return(
@@ -13,7 +14,12 @@ function FirstSection(){
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Inventore, deserunt vel deleniti distinctio ipsa dicta, cupiditate rerum nostrum magni sapiente tenetur repellat possimus laboriosam ipsam illum repudiandae at, quis ea.
 
             </p>
-            <button type="button" class="btn btn-primary">Login</button> 
+            <Link to="/login">
+                <button type="button">
+                      Login
+                </button>
+            </Link>           
+
             </div>
           <img src={climb} className='climb float-right' alt='yes' />
         </div>
