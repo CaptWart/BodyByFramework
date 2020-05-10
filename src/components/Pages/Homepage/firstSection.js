@@ -1,6 +1,6 @@
 import React from 'react';
-import run from './run.jpg';
-import climb from './climb.jpg';
+import run from './images/run.jpg';
+import climb from './images//climb.jpg';
 import './style.css';
 import { Link } from "react-router-dom";
 
