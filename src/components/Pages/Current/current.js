@@ -8,6 +8,10 @@ export function Current() {
         async function fetchUser() {
             const response = await fetch('http://localhost:3001/current', { method: "GET", credentials: 'include' })
             const json = await response.json();
+            
+            if(response.status === 500){
+                window.location.href = "/login";
+            }
             setUser(json)
         }
         fetchUser()
