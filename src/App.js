@@ -11,14 +11,14 @@ import { Logout } from './components/Pages/Logout/logout';
 function App() {
   return (
     <div className="App">
-        <Router>
-              <Route exact path="/" component={FirstSection} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/current" component={Current} />
-              <Route exact path="/create" component={Create} />
-              <Route exact path="/logout" component={Logout} />
+      <Router>
+        <Route exact path="/" component={FirstSection} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/current" component={Current} />
+        <Route exact path="/create" component={Create} />
+        <Route exact path="/logout" component={Logout} />
 
-        </Router>
+      </Router>
     </div>
   );
 }
