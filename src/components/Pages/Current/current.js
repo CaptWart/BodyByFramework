@@ -1,22 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import API from "../../Utils/API";
+import Dashboard from "../../Dashboard";
 
 export function Current() {
     const [user, setUser] = useState([]);
+    const [plans, setPlans] = useState([]);
 
     React.useEffect(function effectFunction() {
         async function fetchUser() {
             const response = await fetch('http://localhost:3001/current', { method: "GET", credentials: 'include' })
             const json = await response.json();
             
-            if(response.status === 500){
+            if(response.status === 500 || response.status === 401){
                 window.location.href = "/login";
             }
             setUser(json)
+            console.log("user json: ", json);
         }
         fetchUser()
 
     }, []);
+
+    useEffect(() => {
+        loadPlans(user._id)
+    }, [user._id]); 
+
+    // Load Plans of the user
+    function loadPlans(userID) {
+        API.getAllPlans(userID)
+          .then(res => {
+            setPlans(res.data)
+          })
+          .catch(err => console.log(err));
+    };
 
     return (
         <div>
@@ -26,6 +43,12 @@ export function Current() {
                     Logout
                 </button>
             </Link>
+
+            <Dashboard
+                userID={user._id}
+                nickname={user.nickname}
+                plans={plans}
+            />
         </div>
     );
 }
