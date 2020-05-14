@@ -129,7 +129,7 @@ export default {
     });
   },
   // Get the food with the given id
-  getFoods: function(id) {
+  getFood: function(id) {
     return axios.get("http://localhost:3001/api/foods/" + id );
   },
   // Create the food with the given data

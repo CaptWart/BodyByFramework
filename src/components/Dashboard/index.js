@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import API from "../../components/Utils/API";
+import API from "../Utils/API";
+import useSetState from "../Utils/useSetState";
 import { Accordion, Card, Button } from "react-bootstrap";
 import Plan from "../Plan";
 import Day from "../Day";
@@ -7,21 +8,33 @@ import Fitness from "../Fitness";
 import Food from "../Food";
 import "./style.css";
 
+const initialFitnessState = {
+  workout: "",
+  weight: 0,
+  sets: 0,
+  reps: 0,
+  time: 0
+}
+
+const initialFoodState = {
+  item: "",
+  calories: 0,
+  price: 0
+}
+
 function Dashboard(props) {
   const [planID, setPlanID] = useState("");
   const [days, setDays] = useState([]);
   const [dayID, setDayID] = useState("");
   const [fitnesses, setFitnesses] = useState([]);
   const [foods, setFoods] = useState([]);
+  const [previousFitness, setPreviousFitness] = useState({});
+  const [previousFood, setPreviousFood] = useState({});
 
-  // const [currentFitnessID, setCurrentFitnessID] = useState("");
-  const [currentFitnessWeight, setCurrentFitnessWeight] = useState(0);
-  const [currentFitnessSets, setCurrentFitnessSets] = useState(0);
-  const [currentFitnessReps, setCurrentFitnessReps] = useState(0);
-  const [currentFitnessTime, setCurrentFitnessTime] = useState(0);
-  const [currentFoodID, setCurrentFoodID] = useState("");
-  const [currentFoodCalories, setCurrentFoodCalories] = useState(0);
-  const [currentFoodPrice, setCurrentFoodPrice] = useState(0);
+  const [fitnessState, setFitnessState] = useSetState(previousFitness);
+  const [foodState, setFoodState] = useSetState(previousFood);
+  // const [fitnessState, setFitnessState] = useSetState(initialFitnessState);
+  // const [foodState, setFoodState] = useSetState(initialFoodState);
 
   // Call setPlanID when props.plans are passed (beginning).
   useEffect(() => {
@@ -51,19 +64,28 @@ function Dashboard(props) {
     }
   }, [dayID]);
 
+  // Call setPreviousFitness(set previousFitness) when finessState changes.
+  useEffect(() => {
+    setPreviousFitness(fitnessState);
+  }, [fitnessState]);
+
+  // Call setPreviousFood(set previousFood) when foodState changes.
+  useEffect(() => {
+    setPreviousFood(foodState);
+  }, [foodState]);
+
   // Load Days of the plan.
   function loadDays(planID) {
-    console.log("loadDays planID: ", planID);
     API.getAllDays(planID)
     .then(res => {
         setDays(res.data);
-        console.log("days data: ", res.data);
     })
     .catch(err => 
       console.log(err)
     );
   };
 
+  /* Fitness(es) API call */
   // Load Fitnesses of the day.
   function loadFitnesses(dayID) {
     API.getAllFitnessesByDay(dayID)
@@ -75,6 +97,41 @@ function Dashboard(props) {
     );
   }
 
+  // Load Fitness (single).
+  function loadFitness(fitnessID){
+    API.getFitness(fitnessID)
+    .then(res => {
+      setFitnessState(res.data);
+    })
+    .catch(err =>
+      console.log(err)
+    );
+  }
+
+  // Create Fitness.
+  function createFitness() {
+    const fitnessData = {...fitnessState, userID: props.userID, planID: planID, dayID: dayID}
+    API.createFitness(fitnessData)
+    .then(res => {
+      console.log("Fitness data created: ", res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
+  // Update Fitness.
+  function updateFitness(fitnessID) {
+    API.updateFitness(fitnessID, fitnessState)
+    .then(res => {
+      console.log("Fitness data updated: ", res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
+  /* Food(s) API call */
   // Load Foods of the day.
   function loadFoods(dayID) {
     API.getAllFoodsByDay(dayID)
@@ -86,19 +143,34 @@ function Dashboard(props) {
     );
   }
 
-  // Update Fitness.
-  function updateFitness(fitnessID) {
-    const fitnessData = {
-      weight: currentFitnessWeight,
-      sets: currentFitnessSets,
-      reps: currentFitnessReps,
-      time: currentFitnessTime
-    }
-    console.log("fitnessID: ", fitnessID);
-    console.log("fitnessData: ", fitnessData);
-    API.updateFitness(fitnessID, fitnessData)
+  // Load Food (single).
+  function loadFood(foodID){
+    API.getFood(foodID)
     .then(res => {
-      console.log("Fitness data updated: ", res.data)
+      setFoodState(res.data);
+    })
+    .catch(err =>
+      console.log(err)
+    );
+  }
+
+  // Create Food.
+  function createFood() {
+    const foodData = {...foodState, userID: props.userID, planID: planID, dayID: dayID};
+    API.createFood(foodData)
+    .then(res => {
+      console.log("Food data created: ", res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
+  // Update Food.
+  function updateFood(foodID) {
+    API.updateFood(foodID, foodState)
+    .then(res => {
+      console.log("Food data updated: ", res.data)
     })
     .catch(err => {
       console.log(err)
@@ -111,31 +183,72 @@ function Dashboard(props) {
 
   const handleDayChange = e => {
     setDayID(e.target.value);
-    console.log("dayID: ", dayID);
   }
 
-  const handleUpdateFitness = e => {
+  /* Fitness event handling */
+  const handleSetFitness = e => {
+    if(e.target.name === "new") {
+      setFitnessState(initialFitnessState);
+    } 
+    else {
+      const fitnessID = e.target.name;
+      loadFitness(fitnessID);
+    }
+  }
+
+  const handleFitnessChange = e => {
+    setFitnessState({
+      [e.target.name]: e.target.value
+    });
+  }
+
+  const handleSaveFitness = e => {
     e.preventDefault();
-    console.log(this);
-    const fitnessID = e.target.value;
-    updateFitness(fitnessID);
+    if(e.target.name === "createBtn") {
+      clearFitness(); // Reset the fitnessState with the initial values.
+      createFitness();
+    }
+    else {
+      const fitnessID = e.target.value;
+      updateFitness(fitnessID);
+    }
   }
 
-  const handleUpdateFitnessWeight = e => {
-    console.log(e);
-    setCurrentFitnessWeight(e.target.value);
+  const clearFitness = () => {
+    setFitnessState(initialFitnessState);
   }
 
-  const handleUpdateFitnessSets = e => {
-    setCurrentFitnessSets(e.target.value);
+  /* Food event handling */
+  const handleSetFood = e => {
+    if(e.target.name === "new") {
+      setFoodState(initialFoodState);
+    }
+    else {
+      const foodID = e.target.name;
+      loadFood(foodID);
+    }
   }
 
-  const handleUpdateFitnessReps = e => {
-    setCurrentFitnessReps(e.target.value);
+  const handleFoodChange = e => {
+    setFoodState({
+      [e.target.name]: e.target.value
+    });
   }
 
-  const handleUpdateFitnessTime = e => {
-    setCurrentFitnessTime(e.target.value);
+  const handleSaveFood = e => {
+    e.preventDefault();
+    if(e.target.name === "createBtn") {
+      clearFood();  // Reset the foodState with the initial values.
+      createFood();
+    }
+    else {
+      const foodID = e.target.value;
+      updateFood(foodID);
+    }
+  }
+
+  const clearFood = () => {
+    setFoodState(initialFoodState);
   }
 
   return (
@@ -168,11 +281,9 @@ function Dashboard(props) {
                 <Card.Body>
                   <Fitness 
                     fitnesses={fitnesses}
-                    handleUpdateFitness={handleUpdateFitness}
-                    handleUpdateFitnessWeight={handleUpdateFitnessWeight}
-                    handleUpdateFitnessSets={handleUpdateFitnessSets}
-                    handleUpdateFitnessReps={handleUpdateFitnessReps}
-                    handleUpdateFitnessTime={handleUpdateFitnessTime}
+                    handleSetFitness={handleSetFitness}
+                    handleFitnessChange={handleFitnessChange}
+                    handleSaveFitness={handleSaveFitness}
                   />
                 </Card.Body>
               </Accordion.Collapse>
@@ -186,20 +297,16 @@ function Dashboard(props) {
               <Accordion.Collapse eventKey="1">
                 <Card.Body>
                   <Food 
-                    foods={foods} 
+                    foods={foods}
+                    handleSetFood={handleSetFood}
+                    handleFoodChange={handleFoodChange}
+                    handleSaveFood={handleSaveFood}
                   />
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
           </Accordion>
         </div>
-        {/* <Fitness
-          fitnesses={fitnesses}
-        />
-        <br/>
-        <Food
-          foods={foods}
-        /> */}
       </div>
     </div>
   );
