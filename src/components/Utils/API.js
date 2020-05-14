@@ -71,7 +71,7 @@ export default {
     return axios.delete("http://localhost:3001/api/days/" + id);
   },
   /* Fitness */
-  // Get all fitnesses with the given dayID
+  // Get all fitnesses with the given planID
   getAllFitnesses: function(planID) {
     return axios({
       method: 'get',

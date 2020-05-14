@@ -68,12 +68,23 @@ function Fitness(props) {
                   </Form.Group>
                   <Button
                     name="updateBtn"
-                    variant="primary" 
+                    variant="primary"
+                    className="mx-2" 
                     type="submit" 
                     value={fitness._id} 
                     onClick={props.handleSaveFitness}
                   >
                     Save
+                  </Button>
+                  <Button
+                    name="deleteBtn"
+                    variant="danger"
+                    className="mx-2"
+                    type="submit" 
+                    value={fitness._id} 
+                    onClick={props.handleDeleteFitness}
+                  >
+                    Delete
                   </Button>
                 </Form>
               </Card.Body>
