@@ -55,9 +55,15 @@ export function Login(props) {
           Bad login credentials
       </label>
       </form>
+      <Link to="/forgotpassword">
+        <button type="button">
+          Forgot Password
+      </button>
+      </Link>
+      <br></br>
       <Link to="/create">
         <button type="button">
-          create
+          Create
       </button>
       </Link>
     </div>
