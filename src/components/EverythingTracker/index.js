@@ -25,17 +25,15 @@ const initialFoodState = {
 
 function EverythingTracker(props) {
   const [planID, setPlanID] = useState("");
+  const [planState, setPlanState] = useState({});
   const [days, setDays] = useState([]);
   const [dayID, setDayID] = useState("");
   const [fitnesses, setFitnesses] = useState([]);
   const [foods, setFoods] = useState([]);
   const [previousFitness, setPreviousFitness] = useState({});
   const [previousFood, setPreviousFood] = useState({});
-
   const [fitnessState, setFitnessState] = useSetState(previousFitness);
   const [foodState, setFoodState] = useSetState(previousFood);
-  // const [fitnessState, setFitnessState] = useSetState(initialFitnessState);
-  // const [foodState, setFoodState] = useSetState(initialFoodState);
 
   // Call setPlanID when props.plans are passed (beginning).
   useEffect(() => {
@@ -75,6 +73,43 @@ function EverythingTracker(props) {
     setPreviousFood(foodState);
   }, [foodState]);
 
+  /* Plan(s) API call */
+  // Create Plan.
+  function createPlan() {
+    const planData = {...planState, userID: props.userID};
+    API.createPlan(planData)
+    .then(res => {
+      console.log("Plan data created: ", res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
+  // UpdatePlan.
+  function updatePlan(planID) {
+    console.log("planID: ", planID);
+    API.updatePlan(planID, planState)
+    .then(res => {
+      console.log("Plan data updated: ", res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
+   // Delete Plan.
+   function deletePlan(planID) {
+    API.deletePlan(planID)
+    .then(res => {
+      console.log("Fitness data deleted: ", res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
+  /* Day(s) API call */
   // Load Days of the plan.
   function loadDays(planID) {
     API.getAllDays(planID)
@@ -203,10 +238,36 @@ function EverythingTracker(props) {
     })
   }
 
+  /* Plan event handling */
+  const handlePlanEntry = e => {
+    console.log("I'm in handlePlanEntry!");
+    console.log("e.targe.value: ", e.target.value);
+    setPlanState({
+      name: e.target.value
+    });
+  }
+
+  const handleSavePlan = e => {
+    // e.preventDefault()
+    if(e.target.name === "createBtn") {
+      createPlan();
+    }
+    else {
+      const planID = e.target.value;
+      updatePlan(planID);
+    }
+  }
+
   const handlePlanChange = e => {
     setPlanID(e.target.value);
   }
 
+  const handleDeletePlan = e => {
+    const planID = e.target.value;
+    deletePlan(planID);
+  }
+
+  /*  Day event handling  */
   const handleDayChange = e => {
     setDayID(e.target.value);
   }
@@ -222,7 +283,7 @@ function EverythingTracker(props) {
     }
   }
 
-  const handleFitnessChange = e => {
+  const handleFitnessEntry = e => {
     setFitnessState({
       [e.target.name]: e.target.value
     });
@@ -261,7 +322,7 @@ function EverythingTracker(props) {
     }
   }
 
-  const handleFoodChange = e => {
+  const handleFoodEntry = e => {
     setFoodState({
       [e.target.name]: e.target.value
     });
@@ -301,11 +362,16 @@ function EverythingTracker(props) {
       <div>
         <Plan
           plans={props.plans}
+          selectedPlan={planID}
           handlePlanChange={handlePlanChange}
+          handlePlanEntry={handlePlanEntry}
+          handleSavePlan={handleSavePlan}
+          handleDeletePlan={handleDeletePlan}
         />
         <br/>
         <Day 
           days={days}
+          selectedPlan={planID}
           handleDayChange={handleDayChange}
         />
         <br/>
@@ -320,10 +386,10 @@ function EverythingTracker(props) {
               </Card.Header>
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
-                  <Fitness 
+                  <Fitness
                     fitnesses={fitnesses}
                     handleSetFitness={handleSetFitness}
-                    handleFitnessChange={handleFitnessChange}
+                    handleFitnessEntry={handleFitnessEntry}
                     handleSaveFitness={handleSaveFitness}
                     handleDeleteFitness={handleDeleteFitness}
                   />
@@ -338,10 +404,10 @@ function EverythingTracker(props) {
               </Card.Header>
               <Accordion.Collapse eventKey="1">
                 <Card.Body>
-                  <Food 
+                  <Food
                     foods={foods}
                     handleSetFood={handleSetFood}
-                    handleFoodChange={handleFoodChange}
+                    handleFoodEntry={handleFoodEntry}
                     handleSaveFood={handleSaveFood}
                     handleDeleteFood={handleDeleteFood}
                   />

@@ -21,13 +21,13 @@ function Food(props) {
             <Accordion.Collapse eventKey={food._id}>
               <Card.Body>
                 <Form>
-                <Form.Group>
+                  <Form.Group>
                     <Form.Label>Item</Form.Label>
                     <Form.Control
                       name="item"
                       type="text" 
                       defaultValue={food.item} 
-                      onChange={props.handleFoodChange}
+                      onChange={props.handleFoodEntry}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -36,7 +36,7 @@ function Food(props) {
                       name="calories"
                       type="text" 
                       defaultValue={food.calories} 
-                      onChange={props.handleFoodChange}
+                      onChange={props.handleFoodEntry}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -45,7 +45,7 @@ function Food(props) {
                       name="price" 
                       type="text" 
                       defaultValue={food.price}
-                      onChange={props.handleFoodChange}
+                      onChange={props.handleFoodEntry}
                     />
                   </Form.Group>
                   <Button
@@ -94,7 +94,7 @@ function Food(props) {
                   <Form.Control
                     name="item"
                     type="text" 
-                    onChange={props.handleFoodChange}
+                    onChange={props.handleFoodEntry}
                   />
                 </Form.Group>
                 <Form.Group>
@@ -102,7 +102,7 @@ function Food(props) {
                   <Form.Control
                     name="calories"
                     type="text" 
-                    onChange={props.handleFoodChange}
+                    onChange={props.handleFoodEntry}
                   />
                 </Form.Group>
                 <Form.Group>
@@ -110,7 +110,7 @@ function Food(props) {
                   <Form.Control
                     name="price"
                     type="text"
-                    onChange={props.handleFoodChange} 
+                    onChange={props.handleFoodEntry} 
                   />
                 </Form.Group>
                 <Button

@@ -27,7 +27,7 @@ function Fitness(props) {
                       name="workout"
                       type="text" 
                       defaultValue={fitness.workout}
-                      onChange={props.handleFitnessChange}
+                      onChange={props.handleFitnessEntry}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -36,7 +36,7 @@ function Fitness(props) {
                       name="weight"
                       type="text" 
                       defaultValue={fitness.weight}
-                      onChange={props.handleFitnessChange}
+                      onChange={props.handleFitnessEntry}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -45,7 +45,7 @@ function Fitness(props) {
                       name="sets"
                       type="text" 
                       defaultValue={fitness.sets}
-                      onChange={props.handleFitnessChange}
+                      onChange={props.handleFitnessEntry}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -54,7 +54,7 @@ function Fitness(props) {
                       name="reps"
                       type="text" 
                       defaultValue={fitness.reps} 
-                      onChange={props.handleFitnessChange}
+                      onChange={props.handleFitnessEntry}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -63,7 +63,7 @@ function Fitness(props) {
                       name="time"
                       type="text" 
                       defaultValue={fitness.time}
-                      onChange={props.handleFitnessChange}
+                      onChange={props.handleFitnessEntry}
                     />
                   </Form.Group>
                   <Button
@@ -113,7 +113,7 @@ function Fitness(props) {
                     <Form.Control
                       name="workout"
                       type="text" 
-                      onChange={props.handleFitnessChange}
+                      onChange={props.handleFitnessEntry}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -121,7 +121,7 @@ function Fitness(props) {
                     <Form.Control
                       name="weight" 
                       type="text" 
-                      onChange={props.handleFitnessChange}
+                      onChange={props.handleFitnessEntry}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -129,7 +129,7 @@ function Fitness(props) {
                     <Form.Control
                       name="sets" 
                       type="text" 
-                      onChange={props.handleFitnessChange}
+                      onChange={props.handleFitnessEntry}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -137,7 +137,7 @@ function Fitness(props) {
                     <Form.Control
                       name="reps" 
                       type="text" 
-                      onChange={props.handleFitnessChange}
+                      onChange={props.handleFitnessEntry}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -145,7 +145,7 @@ function Fitness(props) {
                     <Form.Control
                       name="time"
                       type="text" 
-                      onChange={props.handleFitnessChange}
+                      onChange={props.handleFitnessEntry}
                     />
                   </Form.Group>
                   <Button
