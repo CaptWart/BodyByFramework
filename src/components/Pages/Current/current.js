@@ -10,13 +10,18 @@ export function Current() {
     React.useEffect(function effectFunction() {
         async function fetchUser() {
             const response = await fetch('http://localhost:3001/current', { method: "GET", credentials: 'include' })
-            const json = await response.json();
-            
-            if(response.status === 500 || response.status === 401){
+            console.log(response.status)
+            if(!response || response.status === 500 || response.status === 401){
                 window.location.href = "/login";
             }
-            setUser(json)
-            console.log("user json: ", json);
+            else if(response.status === 403){
+                window.location.href = "/verify"
+            }
+            else{
+                const json = await response.json();
+                setUser(json)
+                console.log("user json: ", json);
+            }
         }
         fetchUser()
 
