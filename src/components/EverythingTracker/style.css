@@ -1,0 +1,25 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+div {
+  margin-top: 1em;
+}
+
+h1, h2 {
+  color: #161B7F;
+}
+
+h2 {
+  font-size: 1.5em !important;
+}
+
+h3 {
+  font-size: 1.5em;
+  color: #ED3D63 !important;
+}
+
+label {
+  color: #223CCF;
+}

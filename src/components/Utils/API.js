@@ -58,6 +58,17 @@ export default {
   getDay: function(id) {
     return axios.get("http://localhost:3001/api/days/" + id );
   },
+  // Get the last day of the plan
+  getLastDay: function(planID) {
+    return axios({
+      method: 'get',
+      url: "http://localhost:3001/api/days/last",
+      // withCredentials: true,
+      params: {
+        planID: planID
+      }
+    });
+  },
   // Create the day with the given data
   createDay: function(dayData) {
     return axios.post("http://localhost:3001/api/days", dayData);
@@ -71,7 +82,7 @@ export default {
     return axios.delete("http://localhost:3001/api/days/" + id);
   },
   /* Fitness */
-  // Get all fitnesses with the given dayID
+  // Get all fitnesses with the given planID
   getAllFitnesses: function(planID) {
     return axios({
       method: 'get',
@@ -129,7 +140,7 @@ export default {
     });
   },
   // Get the food with the given id
-  getFoods: function(id) {
+  getFood: function(id) {
     return axios.get("http://localhost:3001/api/foods/" + id );
   },
   // Create the food with the given data

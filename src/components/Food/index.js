@@ -1,31 +1,131 @@
 import React from "react";
+import { Accordion, Card, Button, Form } from "react-bootstrap";
 
 function Food(props) {
   return (
     <div>
-      <table className="table table-bordered table-responsive-md table-striped text-center">
-      <thead>
-          <tr>
-            <th className="text-center">Item</th>
-            <th className="text-center">Calories</th>
-            <th className="text-center">Price</th>
-          </tr>
-      </thead>
-      <tbody id="foodTable">
-        {props.foods.map(food => 
-          <tr>
-            <td>{food.item}</td>
-            <td>{food.calories}</td>
-            <td>{food.price}</td>
-          </tr>
-        )}
-        <tr>
-          <td contentEditable="true"></td>
-          <td contentEditable="true"></td>
-          <td contentEditable="true"></td>
-        </tr>
-      </tbody>
-      </table>
+      {props.foods.map(food => 
+        <Accordion>
+          <Card>
+            <Card.Header>
+              <Accordion.Toggle
+                name={food._id}
+                as={Button} 
+                variant="link" 
+                eventKey={food._id}
+                onClick={props.handleSetFood}
+              >
+                {food.item}
+              </Accordion.Toggle>
+            </Card.Header>
+            <Accordion.Collapse eventKey={food._id}>
+              <Card.Body>
+                <Form>
+                  <Form.Group>
+                    <Form.Label>Item</Form.Label>
+                    <Form.Control
+                      name="item"
+                      type="text" 
+                      defaultValue={food.item} 
+                      onChange={props.handleFoodEntry}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Calories</Form.Label>
+                    <Form.Control
+                      name="calories"
+                      type="text" 
+                      defaultValue={food.calories} 
+                      onChange={props.handleFoodEntry}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Price</Form.Label>
+                    <Form.Control
+                      name="price" 
+                      type="text" 
+                      defaultValue={food.price}
+                      onChange={props.handleFoodEntry}
+                    />
+                  </Form.Group>
+                  <Button
+                    name="updateBtn"
+                    variant="primary"
+                    type="submit"
+                    value={food._id}
+                    onClick={props.handleSaveFood}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    name="deleteBtn"
+                    variant="danger"
+                    className="mx-2"
+                    type="submit" 
+                    value={food._id} 
+                    onClick={props.handleDeleteFood}
+                  >
+                    Delete
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Accordion.Collapse>
+          </Card>
+        </Accordion>
+      )}
+      <Accordion>
+        <Card>
+          <Card.Header>
+            <Accordion.Toggle 
+              as={Button}
+              name="new"
+              variant="link" 
+              eventKey="new"
+              onClick={props.handleSetFood}
+            >
+              Add New
+            </Accordion.Toggle>
+          </Card.Header>
+          <Accordion.Collapse eventKey="new">
+            <Card.Body>
+              <Form>
+                <Form.Group>
+                  <Form.Label>Item</Form.Label>
+                  <Form.Control
+                    name="item"
+                    type="text" 
+                    onChange={props.handleFoodEntry}
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Calories</Form.Label>
+                  <Form.Control
+                    name="calories"
+                    type="text" 
+                    onChange={props.handleFoodEntry}
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Price</Form.Label>
+                  <Form.Control
+                    name="price"
+                    type="text"
+                    onChange={props.handleFoodEntry} 
+                  />
+                </Form.Group>
+                <Button
+                  name="createBtn"
+                  variant="primary" 
+                  type="submit" 
+                  onClick={props.handleSaveFood}
+                >
+                  Save
+                </Button>
+              </Form>
+            </Card.Body>
+          </Accordion.Collapse>
+        </Card>
+      </Accordion>
     </div>
   );
 }

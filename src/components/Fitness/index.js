@@ -1,37 +1,166 @@
 import React from "react";
+import { Accordion, Card, Button, Form } from "react-bootstrap";
 
 function Fitness(props) {
   return (
     <div>
-      <table className="table table-bordered table-responsive-md table-striped text-center">
-      <thead>
-          <tr>
-            <th className="text-center">Workout</th>
-            <th className="text-center">Weight</th>
-            <th className="text-center">Sets</th>
-            <th className="text-center">Reps</th>
-            <th className="text-center">Time(mins)</th>
-          </tr>
-      </thead>
-      <tbody id="fitnessTable">
-        {props.fitnesses.map(fitness => 
-          <tr>
-            <td>{fitness.workout}</td>
-            <td>{fitness.weight}</td>
-            <td>{fitness.sets}</td>
-            <td>{fitness.reps}</td>
-            <td>{fitness.time}</td>
-          </tr>
-        )}
-        <tr>
-          <td contentEditable="true"></td>
-          <td contentEditable="true"></td>
-          <td contentEditable="true"></td>
-          <td contentEditable="true"></td>
-          <td contentEditable="true"></td>
-        </tr>
-      </tbody>
-      </table>
+      {props.fitnesses.map(fitness => 
+        <Accordion>
+          <Card>
+            <Card.Header>
+              <Accordion.Toggle
+                name={fitness._id}
+                as={Button} 
+                variant="link" 
+                eventKey={fitness._id}
+                onClick={props.handleSetFitness}
+              >
+                {fitness.workout}
+              </Accordion.Toggle>
+            </Card.Header>
+            <Accordion.Collapse eventKey={fitness._id}>
+              <Card.Body>
+                <Form>
+                  <Form.Group>
+                    <Form.Label>Workout</Form.Label>
+                    <Form.Control
+                      name="workout"
+                      type="text" 
+                      defaultValue={fitness.workout}
+                      onChange={props.handleFitnessEntry}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Weight</Form.Label>
+                    <Form.Control
+                      name="weight"
+                      type="text" 
+                      defaultValue={fitness.weight}
+                      onChange={props.handleFitnessEntry}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Sets</Form.Label>
+                    <Form.Control
+                      name="sets"
+                      type="text" 
+                      defaultValue={fitness.sets}
+                      onChange={props.handleFitnessEntry}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Reps</Form.Label>
+                    <Form.Control
+                      name="reps"
+                      type="text" 
+                      defaultValue={fitness.reps} 
+                      onChange={props.handleFitnessEntry}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Time</Form.Label>
+                    <Form.Control
+                      name="time"
+                      type="text" 
+                      defaultValue={fitness.time}
+                      onChange={props.handleFitnessEntry}
+                    />
+                  </Form.Group>
+                  <Button
+                    name="updateBtn"
+                    variant="primary"
+                    className="mx-2" 
+                    type="submit" 
+                    value={fitness._id} 
+                    onClick={props.handleSaveFitness}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    name="deleteBtn"
+                    variant="danger"
+                    className="mx-2"
+                    type="submit" 
+                    value={fitness._id} 
+                    onClick={props.handleDeleteFitness}
+                  >
+                    Delete
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Accordion.Collapse>
+          </Card>
+        </Accordion>
+      )}
+      <Accordion>
+          <Card>
+            <Card.Header>
+              <Accordion.Toggle
+                as={Button}
+                name="new"
+                variant="link"
+                eventKey="new"
+                onClick={props.handleSetFitness}
+              >
+                Add New
+              </Accordion.Toggle>
+            </Card.Header>
+            <Accordion.Collapse eventKey="new">
+              <Card.Body>
+                <Form>
+                  <Form.Group>
+                    <Form.Label>Workout</Form.Label>
+                    <Form.Control
+                      name="workout"
+                      type="text" 
+                      onChange={props.handleFitnessEntry}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Weight</Form.Label>
+                    <Form.Control
+                      name="weight" 
+                      type="text" 
+                      onChange={props.handleFitnessEntry}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Sets</Form.Label>
+                    <Form.Control
+                      name="sets" 
+                      type="text" 
+                      onChange={props.handleFitnessEntry}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Reps</Form.Label>
+                    <Form.Control
+                      name="reps" 
+                      type="text" 
+                      onChange={props.handleFitnessEntry}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Time</Form.Label>
+                    <Form.Control
+                      name="time"
+                      type="text" 
+                      onChange={props.handleFitnessEntry}
+                    />
+                  </Form.Group>
+                  <Button
+                    name="createBtn" 
+                    variant="primary" 
+                    type="submit" 
+                    onClick={props.handleSaveFitness}
+                  >
+                    Save
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Accordion.Collapse>
+          </Card>
+        </Accordion>
     </div>
   );
 }

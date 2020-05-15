@@ -1,14 +1,135 @@
-import React from "react";
+import React, { useState } from "react";
+import { Card, Form, Button } from "react-bootstrap";
+import API from "../Utils/API";
+import "./style.css";
 
 function Plan(props) {
+  const [showCreatePlan, setShowCreatePlan] = useState(false);
+  const [showEditPlan, setShowEditPlan] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState({});
+
+  const onClickCreatePlan = () => setShowCreatePlan(!showCreatePlan);
+  const onClickEditPlan = () => {
+    console.log("selectedPlan: ", selectedPlan);
+    loadPlan(props.selectedPlan);
+    setShowEditPlan(!showEditPlan);
+  }
+
+  const loadPlan = planID => {
+    API.getPlan(planID)
+    .then(res => {
+      setSelectedPlan(res.data);
+    })
+    .catch(err =>
+      console.log(err)
+    );
+  }
+  
   return (
     <div>
-      <label>Select Your Plan</label><br/>
-      <select id="plans" onChange={props.handlePlanChange}>
-        {props.plans.map(plan => (
-          <option value={plan._id}>{plan.name}</option>
-        ))}
-      </select>
+      <Button
+        name="createBtn"
+        variant="primary" 
+        type="submit" 
+        onClick={onClickCreatePlan}
+      >
+        Create New Plan
+      </Button>
+      {showCreatePlan &&
+        <Card>
+          <Form>
+            <Form.Group>
+              <Form.Label>New Plan Name</Form.Label>
+                <Form.Control
+                  id="newPlanName"
+                  name="name"
+                  type="text"
+                  onChange={props.handlePlanEntry}
+                />
+            </Form.Group>
+            <Button
+              name="createBtn"
+              variant="primary" 
+              type="submit" 
+              onClick={props.handleSavePlan}
+            >
+              Save
+            </Button>
+          </Form>
+        </Card>
+      }
+
+      {props.plans.length > 0 &&
+        <div>
+          <label>Select Your Plan</label><br/>
+          <select onChange={props.handlePlanChange}>
+            {props.plans.map(plan => (
+              <option value={plan._id}>{plan.name}</option>
+            ))}
+          </select>
+          <Button
+            name="createBtn"
+            variant="primary" 
+            type="submit"
+            className="ml-2"
+            onClick={onClickEditPlan}
+          >
+            Edit
+          </Button>
+        </div>
+      }
+
+      {showEditPlan &&
+        <Card>
+          <Form>
+            <Form.Group>
+              <Form.Label>Plan Name</Form.Label>
+                <Form.Control
+                  id="newPlanName"
+                  name="name"
+                  type="text"
+                  defaultValue={selectedPlan.name}
+                  onChange={props.handlePlanEntry}
+                />
+            </Form.Group>
+            <Button
+              name="updateBtn"
+              variant="primary" 
+              type="submit"
+              value={selectedPlan._id}
+              onClick={props.handleSavePlan}
+            >
+              Save
+            </Button>
+            <Button
+              name="deleteBtn"
+              variant="danger" 
+              type="submit"
+              className="ml-2"
+              value={selectedPlan._id}
+              onClick={props.handleDeletePlan}
+            >
+              Delete
+            </Button>
+          </Form>
+        </Card>
+      }
+
+
+      {/* {props.plans.length > 0 &&
+        <Form.Group>
+          <Form.Label>Select Your Plan</Form.Label>
+          <Form.Control 
+            as="select" 
+            multiple
+            onChange={props.handlePlanChange}
+          >
+            {props.plans.map(plan => (
+              <option value={plan._id}>{plan.name}</option>
+            ))}
+          </Form.Control>
+        </Form.Group>
+      } */}
     </div>
   )
 }
