@@ -56,7 +56,15 @@ export default {
   },
   // Get the day with the given id
   getDay: function(id) {
-    return axios.get("http://localhost:3001/api/days/" + id );
+    // return axios.get("http://localhost:3001/api/days/" + id );
+    return axios({
+      method: 'get',
+      url: "http://localhost:3001/api/days/id",
+      // withCredentials: true,
+      params: {
+        _id: id
+      }
+    });
   },
   // Get the last day of the plan
   getLastDay: function(planID) {

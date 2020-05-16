@@ -71,7 +71,6 @@ function Plan(props) {
             name="createBtn"
             variant="primary" 
             type="submit"
-            className="ml-2"
             onClick={onClickEditPlan}
           >
             Edit

@@ -4,11 +4,15 @@
 }
 
 div {
-  margin-top: 1em;
+  padding: 2px;
 }
 
 h1, h2 {
   color: #161B7F;
+}
+
+h1 {
+  font-size: 2em !important;
 }
 
 h2 {
@@ -16,10 +20,23 @@ h2 {
 }
 
 h3 {
-  font-size: 1.5em;
+  font-size: 1.5em !important;
   color: #ED3D63 !important;
 }
 
 label {
   color: #223CCF;
+  margin-top: 0.5em !important;
+}
+
+button {
+  margin-left: 0.5em !important;
+}
+
+.card-header {
+  padding: 0.5em !important;
+}
+
+.card-body {
+  padding: 0.5em !important;
 }
