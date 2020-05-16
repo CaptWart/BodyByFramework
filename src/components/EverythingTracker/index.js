@@ -46,6 +46,7 @@ function EverythingTracker(props) {
   useEffect(() => {
     if(planID !== "") {
       loadDays(planID);
+      console.log("planc changed and days loaded");
     }
   }, [planID]);
 
@@ -398,55 +399,61 @@ function EverythingTracker(props) {
           handleDeletePlan={handleDeletePlan}
         />
         <br/>
-        <Day 
-          days={days}
-          selectedPlan={planID}
-          handleDayChange={handleDayChange}
-          handleSaveDay={handleSaveDay}
-          handleDeleteDay={handleDeleteDay}
-        />
+        {props.plans.length > 0 ?
+          <Day 
+            days={days}
+            selectedPlan={planID}
+            handleDayChange={handleDayChange}
+            handleSaveDay={handleSaveDay}
+            handleDeleteDay={handleDeleteDay}
+          />
+          : null
+        }
         <br/>
 
-        <div id="dataForm">
-          <Accordion>
-            <Card>
-              <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                  Fitnesses
-                </Accordion.Toggle>
-              </Card.Header>
-              <Accordion.Collapse eventKey="0">
-                <Card.Body>
-                  <Fitness
-                    fitnesses={fitnesses}
-                    handleSetFitness={handleSetFitness}
-                    handleFitnessEntry={handleFitnessEntry}
-                    handleSaveFitness={handleSaveFitness}
-                    handleDeleteFitness={handleDeleteFitness}
-                  />
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-            <Card>
-              <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                  Foods
-                </Accordion.Toggle>
-              </Card.Header>
-              <Accordion.Collapse eventKey="1">
-                <Card.Body>
-                  <Food
-                    foods={foods}
-                    handleSetFood={handleSetFood}
-                    handleFoodEntry={handleFoodEntry}
-                    handleSaveFood={handleSaveFood}
-                    handleDeleteFood={handleDeleteFood}
-                  />
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-          </Accordion>
-        </div>
+        {days.length > 0 ?
+          <div id="dataForm">
+            <Accordion>
+              <Card>
+                <Card.Header>
+                  <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                    Fitnesses
+                  </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="0">
+                  <Card.Body>
+                    <Fitness
+                      fitnesses={fitnesses}
+                      handleSetFitness={handleSetFitness}
+                      handleFitnessEntry={handleFitnessEntry}
+                      handleSaveFitness={handleSaveFitness}
+                      handleDeleteFitness={handleDeleteFitness}
+                    />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+              <Card>
+                <Card.Header>
+                  <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                    Foods
+                  </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body>
+                    <Food
+                      foods={foods}
+                      handleSetFood={handleSetFood}
+                      handleFoodEntry={handleFoodEntry}
+                      handleSaveFood={handleSaveFood}
+                      handleDeleteFood={handleDeleteFood}
+                    />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
+          </div>
+          : null
+        }
       </div>
     </div>
   );
