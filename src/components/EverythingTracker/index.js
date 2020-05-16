@@ -6,7 +6,6 @@ import Plan from "../Plan";
 import Day from "../Day";
 import Fitness from "../Fitness";
 import Food from "../Food";
-import Dashboard from "../Dashboard";
 import "./style.css";
 
 const initialFitnessState = {
@@ -121,6 +120,29 @@ function EverythingTracker(props) {
     );
   };
 
+  // Create Day.
+  function createDay(newDay) {
+    const planData = {day: newDay, userID: props.userID, planID: planID};
+    API.createDay(planData)
+    .then(res => {
+      console.log("Day data created: ", res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
+  // Delete Day.
+  function deleteDay(dayID) {
+    API.deleteDay(dayID)
+    .then(res => {
+      console.log("Day data deleted: ", res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
   /* Fitness(es) API call */
   // Load Fitnesses of the day.
   function loadFitnesses(dayID) {
@@ -228,7 +250,6 @@ function EverythingTracker(props) {
 
   // Delete Food.
   function deleteFood(foodID) {
-    console.log("deleting food");
     API.deleteFood(foodID)
     .then(res => {
       console.log("Food data deleted: ", res.data)
@@ -240,11 +261,14 @@ function EverythingTracker(props) {
 
   /* Plan event handling */
   const handlePlanEntry = e => {
-    console.log("I'm in handlePlanEntry!");
     console.log("e.targe.value: ", e.target.value);
     setPlanState({
       name: e.target.value
     });
+  }
+
+  const handlePlanChange = e => {
+    setPlanID(e.target.value);
   }
 
   const handleSavePlan = e => {
@@ -258,10 +282,6 @@ function EverythingTracker(props) {
     }
   }
 
-  const handlePlanChange = e => {
-    setPlanID(e.target.value);
-  }
-
   const handleDeletePlan = e => {
     const planID = e.target.value;
     deletePlan(planID);
@@ -270,6 +290,18 @@ function EverythingTracker(props) {
   /*  Day event handling  */
   const handleDayChange = e => {
     setDayID(e.target.value);
+  }
+
+  const handleSaveDay = e => {
+    const newDay = parseInt(e.target.value) + 1;
+    console.log("new day is: ", newDay);
+    createDay(newDay);
+  }
+
+  const handleDeleteDay = e => {
+    const dayID = e.target.value;
+    console.log(dayID);
+    deleteDay(dayID);
   }
 
   /* Fitness event handling */
@@ -290,7 +322,7 @@ function EverythingTracker(props) {
   }
 
   const handleSaveFitness = e => {
-    e.preventDefault();
+    // e.preventDefault();
     if(e.target.name === "createBtn") {
       clearFitness(); // Reset the fitnessState with the initial values.
       createFitness();
@@ -302,7 +334,7 @@ function EverythingTracker(props) {
   }
 
   const handleDeleteFitness = e => {
-    e.preventDefault();
+    // e.preventDefault();
     const fitnessID = e.target.value;
     deleteFitness(fitnessID);
   }
@@ -329,7 +361,7 @@ function EverythingTracker(props) {
   }
 
   const handleSaveFood = e => {
-    e.preventDefault();
+    // e.preventDefault();
     if(e.target.name === "createBtn") {
       clearFood();  // Reset the foodState with the initial values.
       createFood();
@@ -341,7 +373,7 @@ function EverythingTracker(props) {
   }
 
   const handleDeleteFood = e => {
-    e.preventDefault();
+    // e.preventDefault();
     console.log("delete food e.target.value: ", e.target.value);
     const foodID = e.target.value;
     deleteFood(foodID);
@@ -356,9 +388,6 @@ function EverythingTracker(props) {
       <div>
         <h1>{props.nickname}'s BBF Tracker</h1>
       </div>
-      <Dashboard 
-
-      />
       <div>
         <Plan
           plans={props.plans}
@@ -369,53 +398,61 @@ function EverythingTracker(props) {
           handleDeletePlan={handleDeletePlan}
         />
         <br/>
-        <Day 
-          days={days}
-          selectedPlan={planID}
-          handleDayChange={handleDayChange}
-        />
+        {props.plans.length > 0 ?
+          <Day 
+            days={days}
+            selectedPlan={planID}
+            handleDayChange={handleDayChange}
+            handleSaveDay={handleSaveDay}
+            handleDeleteDay={handleDeleteDay}
+          />
+          : null
+        }
         <br/>
 
-        <div id="dataForm">
-          <Accordion>
-            <Card>
-              <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                  Fitnesses
-                </Accordion.Toggle>
-              </Card.Header>
-              <Accordion.Collapse eventKey="0">
-                <Card.Body>
-                  <Fitness
-                    fitnesses={fitnesses}
-                    handleSetFitness={handleSetFitness}
-                    handleFitnessEntry={handleFitnessEntry}
-                    handleSaveFitness={handleSaveFitness}
-                    handleDeleteFitness={handleDeleteFitness}
-                  />
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-            <Card>
-              <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                  Foods
-                </Accordion.Toggle>
-              </Card.Header>
-              <Accordion.Collapse eventKey="1">
-                <Card.Body>
-                  <Food
-                    foods={foods}
-                    handleSetFood={handleSetFood}
-                    handleFoodEntry={handleFoodEntry}
-                    handleSaveFood={handleSaveFood}
-                    handleDeleteFood={handleDeleteFood}
-                  />
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-          </Accordion>
-        </div>
+        {days.length > 0 ?
+          <div id="dataForm">
+            <Accordion>
+              <Card>
+                <Card.Header>
+                  <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                    Fitnesses
+                  </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="0">
+                  <Card.Body>
+                    <Fitness
+                      fitnesses={fitnesses}
+                      handleSetFitness={handleSetFitness}
+                      handleFitnessEntry={handleFitnessEntry}
+                      handleSaveFitness={handleSaveFitness}
+                      handleDeleteFitness={handleDeleteFitness}
+                    />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+              <Card>
+                <Card.Header>
+                  <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                    Foods
+                  </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body>
+                    <Food
+                      foods={foods}
+                      handleSetFood={handleSetFood}
+                      handleFoodEntry={handleFoodEntry}
+                      handleSaveFood={handleSaveFood}
+                      handleDeleteFood={handleDeleteFood}
+                    />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
+          </div>
+          : null
+        }
       </div>
     </div>
   );
