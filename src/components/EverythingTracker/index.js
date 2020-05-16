@@ -46,7 +46,6 @@ function EverythingTracker(props) {
   useEffect(() => {
     if(planID !== "") {
       loadDays(planID);
-      console.log("planc changed and days loaded");
     }
   }, [planID]);
 

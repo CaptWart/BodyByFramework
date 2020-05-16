@@ -77,6 +77,17 @@ export default {
       }
     });
   },
+  // Get the last day of the plan
+  getLastDay: function(planID) {
+    return axios({
+      method: 'get',
+      url: "http://localhost:3001/api/days/last",
+      // withCredentials: true,
+      params: {
+        planID: planID
+      }
+    });
+  },
   // Create the day with the given data
   createDay: function(dayData) {
     return axios.post("http://localhost:3001/api/days", dayData);

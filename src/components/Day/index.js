@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import API from "../Utils/API";
 
 function Day(props) {
+
   const [lastDay, setLastDay] = useState({_id: 0, day: 0});
 
   useEffect(() => {
@@ -14,6 +15,7 @@ function Day(props) {
     API.getLastDay(planID)
     .then(res => {
       console.log("res.data: ", res.data);
+ 
       setLastDay(res.data);
     })
     .catch(err =>
@@ -24,6 +26,7 @@ function Day(props) {
   return (
     <div>
       <h3>{props.days.length} Days Plan</h3>
+
         <Button
           name="addBtn"
           variant="primary" 
@@ -45,6 +48,7 @@ function Day(props) {
         </Button>
         : null
       }
+    
       {props.days.length > 0 &&
         <div>
           <label>Select the Day</label><br/>
