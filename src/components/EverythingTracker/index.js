@@ -33,6 +33,7 @@ function EverythingTracker(props) {
   const [previousFood, setPreviousFood] = useState({});
   const [fitnessState, setFitnessState] = useSetState(previousFitness);
   const [foodState, setFoodState] = useSetState(previousFood);
+  const [lastDay, setLastDay] = useState({});
 
   // Call setPlanID when props.plans are passed (beginning).
   useEffect(() => {
@@ -46,6 +47,7 @@ function EverythingTracker(props) {
   useEffect(() => {
     if(planID !== "") {
       loadDays(planID);
+      loadLastDay(planID);
     }
   }, [planID]);
 
@@ -120,11 +122,24 @@ function EverythingTracker(props) {
     );
   };
 
+  const loadLastDay = planID => {
+    API.getLastDay(planID)
+    .then(res => {
+      setLastDay(res.data);
+      console.log("res.data: ", res.data);
+    })
+    .catch(err =>
+      console.log(err)
+    );
+  }
+
   // Create Day.
   function createDay(newDay) {
     const planData = {day: newDay, userID: props.userID, planID: planID};
     API.createDay(planData)
     .then(res => {
+      loadDays(planID);
+      loadLastDay(planID);
       console.log("Day data created: ", res.data)
     })
     .catch(err => {
@@ -136,6 +151,8 @@ function EverythingTracker(props) {
   function deleteDay(dayID) {
     API.deleteDay(dayID)
     .then(res => {
+      loadDays(planID);
+      loadLastDay(planID);
       console.log("Day data deleted: ", res.data)
     })
     .catch(err => {
@@ -293,14 +310,12 @@ function EverythingTracker(props) {
   }
 
   const handleSaveDay = e => {
-    const newDay = parseInt(e.target.value) + 1;
-    console.log("new day is: ", newDay);
+    const newDay = parseInt(lastDay[0].day) + 1;
     createDay(newDay);
   }
 
   const handleDeleteDay = e => {
-    const dayID = e.target.value;
-    console.log(dayID);
+    const dayID = lastDay[0]._id;
     deleteDay(dayID);
   }
 
@@ -401,7 +416,7 @@ function EverythingTracker(props) {
         {props.plans.length > 0 ?
           <Day 
             days={days}
-            selectedPlan={planID}
+            lastDay={lastDay}
             handleDayChange={handleDayChange}
             handleSaveDay={handleSaveDay}
             handleDeleteDay={handleDeleteDay}
