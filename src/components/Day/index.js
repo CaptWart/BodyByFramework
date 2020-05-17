@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 function Day(props) {
   return (
     <div>
-      <h3>{props.days.length} Days Plan</h3>
+      <h2>{props.days.length} Days Plan</h2>
 
       <Button
         name="addBtn"
