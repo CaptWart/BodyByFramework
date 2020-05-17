@@ -8,6 +8,7 @@ export function Create(props) {
     const [ageCheck, setAgeCheck] = useState(false);
     const [policyCheck, setPolicyCheck] = useState(false);
     const [badForm, setBadForm] = useState("none")
+    const [emailUse, setEmailUse] = useState("none")
 
 
     const ageCheckHandler = () => {
@@ -34,7 +35,7 @@ export function Create(props) {
             setBadForm("block")
         }
         else {
-            fetch('http://localhost:3001/createUser', {
+            fetch('http://ec2-3-13-138-147.us-east-2.compute.amazonaws.com/createUser', {
                 method: 'POST',
                 mode: 'cors',
                 redirect: 'follow',
@@ -46,6 +47,9 @@ export function Create(props) {
                     if (response.status === 500) {
                         console.log("bad")
                         //window.location.href = "/login";
+                    }
+                    else if (response.status === 400){
+                        setEmailUse("block")
                     }
                     else {
                         window.location.href = "/login";
@@ -64,7 +68,11 @@ export function Create(props) {
                     placeholder="Email Address"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                />
+                />                
+                <label
+                style={{ display: emailUse }}>
+                Email in use
+                </label>
                 <br></br>
                 <input
                     type="text"

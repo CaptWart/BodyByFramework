@@ -13,7 +13,7 @@ export function Login(props) {
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
 
-    fetch('http://localhost:3001/login', {
+    fetch('http://ec2-3-13-138-147.us-east-2.compute.amazonaws.com/login', {
       method: 'POST',
       mode: 'cors',
       redirect: 'follow',
