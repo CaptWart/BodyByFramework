@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import API from "../Utils/API";
 import useSetState from "../Utils/useSetState";
 import { Accordion, Card, Button } from "react-bootstrap";
+import API from "../Utils/API";
+import Dashboard from "../Dashboard";
 import Plan from "../Plan";
 import Day from "../Day";
 import Fitness from "../Fitness";
@@ -310,7 +311,9 @@ function EverythingTracker(props) {
   }
 
   const handleSaveDay = e => {
-    const newDay = parseInt(lastDay[0].day) + 1;
+    let last = 0;
+    if(lastDay.length) last = parseInt(lastDay[0].day);
+    const newDay = last + 1;
     createDay(newDay);
   }
 
@@ -399,7 +402,7 @@ function EverythingTracker(props) {
   }
 
   return (
-    <div>
+    <Card className="containerCard">
       <div>
         <h1>{props.nickname}'s BBF Tracker</h1>
       </div>
@@ -412,7 +415,11 @@ function EverythingTracker(props) {
           handleSavePlan={handleSavePlan}
           handleDeletePlan={handleDeletePlan}
         />
-        <br/>
+        <Dashboard 
+          userID={props.userID}
+          planID={planID}
+        />
+        <Card className="containerCard">
         {props.plans.length > 0 ?
           <Day 
             days={days}
@@ -468,8 +475,9 @@ function EverythingTracker(props) {
           </div>
           : null
         }
+        </Card>
       </div>
-    </div>
+    </Card>
   );
 }
 
