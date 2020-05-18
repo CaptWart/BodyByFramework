@@ -28,13 +28,13 @@ function EverythingTracker(props) {
   const [planState, setPlanState] = useState({});
   const [days, setDays] = useState([]);
   const [dayID, setDayID] = useState("");
+  const [lastDay, setLastDay] = useState({});
   const [fitnesses, setFitnesses] = useState([]);
   const [foods, setFoods] = useState([]);
   const [previousFitness, setPreviousFitness] = useState({});
   const [previousFood, setPreviousFood] = useState({});
   const [fitnessState, setFitnessState] = useSetState(previousFitness);
   const [foodState, setFoodState] = useSetState(previousFood);
-  const [lastDay, setLastDay] = useState({});
 
   // Call setPlanID when props.plans are passed (beginning).
   useEffect(() => {
@@ -150,6 +150,7 @@ function EverythingTracker(props) {
 
   // Delete Day.
   function deleteDay(dayID) {
+    console.log("lastDay: ", lastDay);
     API.deleteDay(dayID)
     .then(res => {
       loadDays(planID);

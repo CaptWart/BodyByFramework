@@ -19,7 +19,7 @@ h2 {
   font-size: 1.5em !important;
 }
 
-h3 {
+h3, .dayToDelete {
   font-size: 1em !important;
   color: #ED3D63 !important;
 }
