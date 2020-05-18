@@ -50,6 +50,11 @@ export function Login(props) {
         />
         <br></br>
         <input type="submit" value="Login" />
+        <Link to="/create">
+          <button type="button">
+            Create
+          </button>
+        </Link>
         <label
           style={{ display: badLogin }}>
           Bad login credentials
@@ -61,11 +66,6 @@ export function Login(props) {
       </button>
       </Link>
       <br></br>
-      <Link to="/create">
-        <button type="button">
-          Create
-      </button>
-      </Link>
     </div>
   );
 }

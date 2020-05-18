@@ -1,28 +1,42 @@
 .frontBox{
     height: 600px;
-    width: 800px;
+    width: 50%;
+    position: fixed;
+    top: auto;
     background-color: white;
-    position: absolute;
-    left: 50%;
-    margin-left: -400px;
-    z-index: 1;
-    top: 30px;
+    position: relative;
+    /* top: 30px; */
     animation: grow 2s;
     text-align: center;
     opacity: 80%;
-}
-.mainbox{
-    height: 660px;
-    width: 1400px;
-    position: relative;
     margin: auto;
 }
-
-.section{
+.mainbox{
+    height: 1000px;
+    background-size: cover;
+    position: relative;
+    /* left: 0;
+    top: 0;
+    width: 100%; */
+    height: auto;
+    /* object-fit: cover; */
+    /* display: block;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out 0s;
+    box-sizing: border-box; */
     background-image: url('images/background.jpg');
 }
 
-.climb{
+#imgbg{
+
+}
+.section{
+    /* background-image: url('images/background.jpg'); */
+
+}
+
+
+/* .climb{
     animation: slideRight 800ms;
     position: relative;
     left: 80px;
@@ -64,4 +78,4 @@
         opacity: 80%;
     }
 
-}
+} */
