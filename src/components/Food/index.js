@@ -24,6 +24,7 @@ function Food(props) {
                   <Form.Group>
                     <Form.Label>Item</Form.Label>
                     <Form.Control
+                      key={food._id}
                       name="item"
                       type="text" 
                       defaultValue={food.item} 
@@ -33,6 +34,7 @@ function Food(props) {
                   <Form.Group>
                     <Form.Label>Calories</Form.Label>
                     <Form.Control
+                      key={food._id}
                       name="calories"
                       type="text" 
                       defaultValue={food.calories} 
@@ -42,6 +44,7 @@ function Food(props) {
                   <Form.Group>
                     <Form.Label>Price</Form.Label>
                     <Form.Control
+                      key={food._id}
                       name="price" 
                       type="text" 
                       defaultValue={food.price}
