@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import API from "../../Utils/API";
-import Dashboard from "../../Dashboard";
 import EverythingTracker from "../../EverythingTracker";
 
 export function Current() {
@@ -49,10 +48,6 @@ export function Current() {
                     Logout
                 </button>
             </Link>
-
-            <Dashboard 
-
-            />
 
             <EverythingTracker
                 userID={user._id}

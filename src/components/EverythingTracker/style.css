@@ -19,8 +19,8 @@ h2 {
   font-size: 1.5em !important;
 }
 
-h3 {
-  font-size: 1.5em !important;
+h3, .dayToDelete {
+  font-size: 1em !important;
   color: #ED3D63 !important;
 }
 
@@ -32,6 +32,10 @@ label {
 
 button {
   margin-left: 0.5em !important;
+}
+
+.containerCard {
+  margin: 0.5em;
 }
 
 .card-header {

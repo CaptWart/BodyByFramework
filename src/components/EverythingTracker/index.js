@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import API from "../Utils/API";
 import useSetState from "../Utils/useSetState";
 import { Accordion, Card, Button } from "react-bootstrap";
+import API from "../Utils/API";
+import Dashboard from "../Dashboard";
 import Plan from "../Plan";
 import Day from "../Day";
 import Fitness from "../Fitness";
@@ -27,6 +28,7 @@ function EverythingTracker(props) {
   const [planState, setPlanState] = useState({});
   const [days, setDays] = useState([]);
   const [dayID, setDayID] = useState("");
+  const [lastDay, setLastDay] = useState({});
   const [fitnesses, setFitnesses] = useState([]);
   const [foods, setFoods] = useState([]);
   const [previousFitness, setPreviousFitness] = useState({});
@@ -46,6 +48,7 @@ function EverythingTracker(props) {
   useEffect(() => {
     if(planID !== "") {
       loadDays(planID);
+      loadLastDay(planID);
     }
   }, [planID]);
 
@@ -120,11 +123,24 @@ function EverythingTracker(props) {
     );
   };
 
+  const loadLastDay = planID => {
+    API.getLastDay(planID)
+    .then(res => {
+      setLastDay(res.data);
+      console.log("res.data: ", res.data);
+    })
+    .catch(err =>
+      console.log(err)
+    );
+  }
+
   // Create Day.
   function createDay(newDay) {
     const planData = {day: newDay, userID: props.userID, planID: planID};
     API.createDay(planData)
     .then(res => {
+      loadDays(planID);
+      loadLastDay(planID);
       console.log("Day data created: ", res.data)
     })
     .catch(err => {
@@ -134,8 +150,11 @@ function EverythingTracker(props) {
 
   // Delete Day.
   function deleteDay(dayID) {
+    console.log("lastDay: ", lastDay);
     API.deleteDay(dayID)
     .then(res => {
+      loadDays(planID);
+      loadLastDay(planID);
       console.log("Day data deleted: ", res.data)
     })
     .catch(err => {
@@ -293,14 +312,14 @@ function EverythingTracker(props) {
   }
 
   const handleSaveDay = e => {
-    const newDay = parseInt(e.target.value) + 1;
-    console.log("new day is: ", newDay);
+    let last = 0;
+    if(lastDay.length) last = parseInt(lastDay[0].day);
+    const newDay = last + 1;
     createDay(newDay);
   }
 
   const handleDeleteDay = e => {
-    const dayID = e.target.value;
-    console.log(dayID);
+    const dayID = lastDay[0]._id;
     deleteDay(dayID);
   }
 
@@ -384,7 +403,7 @@ function EverythingTracker(props) {
   }
 
   return (
-    <div>
+    <Card className="containerCard">
       <div>
         <h1>{props.nickname}'s BBF Tracker</h1>
       </div>
@@ -397,11 +416,15 @@ function EverythingTracker(props) {
           handleSavePlan={handleSavePlan}
           handleDeletePlan={handleDeletePlan}
         />
-        <br/>
+        <Dashboard 
+          userID={props.userID}
+          planID={planID}
+        />
+        <Card className="containerCard">
         {props.plans.length > 0 ?
           <Day 
             days={days}
-            selectedPlan={planID}
+            lastDay={lastDay}
             handleDayChange={handleDayChange}
             handleSaveDay={handleSaveDay}
             handleDeleteDay={handleDeleteDay}
@@ -453,8 +476,9 @@ function EverythingTracker(props) {
           </div>
           : null
         }
+        </Card>
       </div>
-    </div>
+    </Card>
   );
 }
 
