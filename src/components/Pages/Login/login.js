@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
+import phone from './phone.jpg'
+import { Row, Col } from "react-bootstrap"
 export function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,14 +34,21 @@ export function Login(props) {
   }
   return (
     <div>
+      <Row>
+      <Col>
+        <img style={{width: "100%"}} src={phone}/>
+      </Col>
+      <Col>
       <form onSubmit={handleSubmit}>
-        <h1>Login</h1>
+        <h1>Body By Framework</h1>
+        <br></br>
         <input
           type="text"
           placeholder="Email"
           value={email}
           onChange={e => setEmail(e.target.value)}
         />
+        <br></br>
         <br></br>
         <input
           type="password"
@@ -49,23 +57,17 @@ export function Login(props) {
           onChange={e => setPassword(e.target.value)}
         />
         <br></br>
-        <input type="submit" value="Login" />
-        <Link to="/create">
-          <button type="button">
-            Create
-          </button>
-        </Link>
+        <br></br>
+        <input style={{height: "28px", width: "178px"}} type="submit" value="Login" />
         <label
           style={{ display: badLogin }}>
           Bad login credentials
       </label>
       </form>
-      <Link to="/forgotpassword">
-        <button type="button">
-          Forgot Password
-      </button>
-      </Link>
-      <br></br>
+      <p> <a href="/forgotpassword">Forgot password</a></p>
+      <p> Don't have an account <a href="/create">create</a> one!</p>
+      </Col>
+      </Row>
     </div>
   );
 }

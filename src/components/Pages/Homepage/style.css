@@ -3,13 +3,14 @@
     width: 50%;
     position: fixed;
     top: auto;
-    background-color: white;
+    /* background-color: white; */
     position: relative;
     /* top: 30px; */
     animation: grow 2s;
     text-align: center;
     opacity: 80%;
     margin: auto;
+    color: white;
 }
 .mainbox{
     height: 1000px;
@@ -24,9 +25,13 @@
     opacity: 1;
     transition: opacity 0.5s ease-in-out 0s;
     box-sizing: border-box; */
-    background-image: url('images/background.jpg');
+    /* background-image: url('images/background.jpg'); */
+    background-color: #8d3fd0;
 }
 
+a{
+    font-weight: 700;
+}
 #imgbg{
 
 }
