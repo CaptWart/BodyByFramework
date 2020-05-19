@@ -24,6 +24,7 @@ function Fitness(props) {
                   <Form.Group>
                     <Form.Label>Workout</Form.Label>
                     <Form.Control
+                      key={fitness._id}
                       name="workout"
                       type="text" 
                       defaultValue={fitness.workout}
@@ -33,6 +34,7 @@ function Fitness(props) {
                   <Form.Group>
                     <Form.Label>Weight</Form.Label>
                     <Form.Control
+                      key={fitness._id}
                       name="weight"
                       type="text" 
                       defaultValue={fitness.weight}
@@ -42,6 +44,7 @@ function Fitness(props) {
                   <Form.Group>
                     <Form.Label>Sets</Form.Label>
                     <Form.Control
+                      key={fitness._id}
                       name="sets"
                       type="text" 
                       defaultValue={fitness.sets}
@@ -51,6 +54,7 @@ function Fitness(props) {
                   <Form.Group>
                     <Form.Label>Reps</Form.Label>
                     <Form.Control
+                      key={fitness._id}
                       name="reps"
                       type="text" 
                       defaultValue={fitness.reps} 
@@ -60,6 +64,7 @@ function Fitness(props) {
                   <Form.Group>
                     <Form.Label>Time</Form.Label>
                     <Form.Control
+                      key={fitness._id}
                       name="time"
                       type="text" 
                       defaultValue={fitness.time}

@@ -1,51 +1,45 @@
-import React, { useState, useEffect } from "react";
-import { Button } from "react-bootstrap";
-import API from "../Utils/API";
+import React, { useState } from "react";
+import { Button, Alert } from "react-bootstrap";
 
 function Day(props) {
-
-  const [lastDay, setLastDay] = useState({_id: 0, day: 0});
-
-  useEffect(() => {
-    console.log("this is the current selectedPlan: ", props.selectedPlan);
-    loadLastDay(props.selectedPlan);
-  }, [props.selectedPlan]);
-
-  const loadLastDay = planID => {
-    API.getLastDay(planID)
-    .then(res => {
-      console.log("res.data: ", res.data);
- 
-      setLastDay(res.data);
-    })
-    .catch(err =>
-      console.log(err)
-    );
-  }
+  const [showAlert, setShowAlert] = useState(false);
 
   return (
     <div>
-      <h3>{props.days.length} Days Plan</h3>
+      <h2>{props.days.length} Days Plan</h2>
+      <Button
+        name="addBtn"
+        variant="primary" 
+        type="submit" 
+        onClick={props.handleSaveDay}
+      >
+        Add Day
+      </Button>
 
-        <Button
-          name="addBtn"
-          variant="primary" 
-          type="submit" 
-          value={lastDay.length > 0 ? lastDay[0].day : 0}
-          onClick={props.handleSaveDay}
-        >
-          Add Day
-        </Button>
       {props.days.length > 0 ?
-        <Button
-          name="deleteBtn"
-          variant="danger" 
-          type="submit"
-          value={lastDay.length > 0 ? lastDay[0]._id : 0}
-          onClick={props.handleDeleteDay}
-        >
-          Remove Day
-        </Button>
+        <span>
+          {!showAlert && 
+            <Button
+              name="deleteBtn"
+              variant="danger" 
+              type="submit"
+              onClick={() => setShowAlert(true)}
+            >
+              Remove Day
+            </Button>
+          }
+          <Alert show={showAlert} variant="danger">
+          <Alert.Heading>Are you sure?</Alert.Heading>
+          <p>
+            You are about to delete all the fitness and food data associated with 
+            <span class="dayToDelete"> Day {props.days[props.days.length -1].day}.</span>
+          </p>
+          <div className="d-flex justify-content-end">
+            <Button onClick={() => setShowAlert(false)} variant="outline-primary">Cancel</Button>
+            <Button onClick={() => {props.handleDeleteDay(); setShowAlert(false);}} variant="outline-danger">Delete</Button>
+          </div>
+          </Alert>
+        </span>
         : null
       }
     
