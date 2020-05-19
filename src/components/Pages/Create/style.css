@@ -1,0 +1,14 @@
+#mainframe{
+    position: relative;
+    left: 50%;
+    margin-top: 200px;
+    height: 480px;
+    width: 350px;
+    border-color: black;
+    border-style: solid;
+    text-align: center;
+}
+
+.inputs{
+    margin-bottom: 8px;
+}

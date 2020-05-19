@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import phone from './phone.jpg'
-import { Row, Col } from "react-bootstrap"
+import { Row, Col, Container } from "react-bootstrap"
+
 export function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,11 +35,12 @@ export function Login(props) {
   }
   return (
     <div>
+      <Container>
       <Row>
-      <Col>
-        <img style={{width: "100%"}} src={phone}/>
+      <Col xs={6}>
+        <img src={phone}/>
       </Col>
-      <Col>
+      <Col id='login'>
       <form onSubmit={handleSubmit}>
         <h1>Body By Framework</h1>
         <br></br>
@@ -68,6 +70,7 @@ export function Login(props) {
       <p> Don't have an account <a href="/create">create</a> one!</p>
       </Col>
       </Row>
+      </Container>
     </div>
   );
 }

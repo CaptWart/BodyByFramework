@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import './style.css';
 
 export function Create(props) {
     const [email, setEmail] = useState("");
@@ -61,9 +62,10 @@ export function Create(props) {
     }
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <h1>Create account</h1>
+            <form id='mainframe' onSubmit={handleSubmit}>
+                <h1>Body By Framework</h1>
                 <input
+                    class="inputs"
                     type="text"
                     placeholder="Email Address"
                     value={email}
@@ -75,6 +77,7 @@ export function Create(props) {
                 </label>
                 <br></br>
                 <input
+                    class="inputs"
                     type="text"
                     placeholder="Nickname"
                     value={nickname}
@@ -82,6 +85,7 @@ export function Create(props) {
                 />
                 <br></br>
                 <input
+                    class="inputs"
                     type="password"
                     placeholder="Password"
                     value={password}
@@ -89,6 +93,7 @@ export function Create(props) {
                 />
                 <br></br>
                 <input
+                    class="inputs"
                     name="isGoing"
                     type="Checkbox"
                     checked={ageCheck}
@@ -96,23 +101,21 @@ export function Create(props) {
                 /> I'm 13 I promise
         <br></br>
                 <input
+                    class="inputs"
                     name="isGoing"
                     type="Checkbox"
                     checked={policyCheck}
                     onChange={policyCheckHandler}
                 /> I agree to your stupid policies
         <br></br>
-                <input type="submit" value="Submit" />
-                <label
-                    style={{ display: badForm }}>
-                    Everything needs to be filled and checked
-      </label>
+        <input style={{height: "28px", width: "178px"}} type="submit" value="Create Account" />
+        <label
+            class="inputs"
+            style={{ display: badForm }}>
+            Everything needs to be filled and checked
+        </label>
+        <p> Have an account <a href="/">login</a></p>
             </form>
-            <Link to="/login">
-                <button type="button">
-                    Login
-                </button>
-            </Link>
         </div>
     );
 }
