@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Alert } from "react-bootstrap";
+import { Button, Alert, Card, Form } from "react-bootstrap";
 
 function Day(props) {
   const [showAlert, setShowAlert] = useState(false);
@@ -48,9 +48,31 @@ function Day(props) {
           <label>Select the Day</label><br/>
           <select id="days" onChange={props.handleDayChange}>
             {props.days.map(day => (
-              <option value={day._id}>Day: {day.day}</option>
+              <option key={day._id} value={day._id}>Day: {day.day}</option>
             ))}
           </select>
+          <Card>
+            <Form>
+              <Form.Group>
+                <Form.Label>Body Weight</Form.Label>
+                  <Form.Control
+                    id="bodyWeight"
+                    name="bodyWeight"
+                    type="text"
+                    defaultValue={props.bodyWeight}
+                    onChange={props.handleBodyWeightEntry}
+                  />
+              </Form.Group>
+              <Button
+                name="createBtn"
+                variant="primary" 
+                type="submit" 
+                onClick={props.handleSaveBodyWeight}
+              >
+                Save
+              </Button>
+            </Form>
+          </Card>
         </div>
       }
     </div>

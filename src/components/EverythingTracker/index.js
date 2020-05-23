@@ -11,9 +11,11 @@ import "./style.css";
 
 const initialFitnessState = {
   workout: "",
+  type: "",
   weight: 0,
   sets: 0,
   reps: 0,
+  distance: 0,
   time: 0
 }
 
@@ -24,10 +26,12 @@ const initialFoodState = {
 }
 
 function EverythingTracker(props) {
+  const userID = props.userID;
   const [planID, setPlanID] = useState("");
   const [planState, setPlanState] = useState({});
   const [days, setDays] = useState([]);
   const [dayID, setDayID] = useState("");
+  const [bodyWeight, setBodyWeight] = useState(0);
   const [lastDay, setLastDay] = useState({});
   const [fitnesses, setFitnesses] = useState([]);
   const [foods, setFoods] = useState([]);
@@ -60,6 +64,7 @@ function EverythingTracker(props) {
   // Call loadFitnesses(set fitnesses) and loadFoods(set foods) when dayID changes.
   useEffect(() => {
     if(dayID !== "") {
+      loadDay(dayID);
       loadFitnesses(dayID);
       loadFoods(dayID);
     }
@@ -78,7 +83,7 @@ function EverythingTracker(props) {
   /* Plan(s) API call */
   // Create Plan.
   function createPlan() {
-    const planData = {...planState, userID: props.userID};
+    const planData = {...planState, userID: userID};
     API.createPlan(planData)
     .then(res => {
       console.log("Plan data created: ", res.data)
@@ -90,7 +95,6 @@ function EverythingTracker(props) {
 
   // UpdatePlan.
   function updatePlan(planID) {
-    console.log("planID: ", planID);
     API.updatePlan(planID, planState)
     .then(res => {
       console.log("Plan data updated: ", res.data)
@@ -123,6 +127,16 @@ function EverythingTracker(props) {
     );
   };
 
+  function loadDay(dayID) {
+    API.getDay(dayID)
+    .then(res => {
+      setBodyWeight(res.data.bodyWeight);
+    })
+    .catch(err =>
+      console.log(err)
+    );
+  }
+
   const loadLastDay = planID => {
     API.getLastDay(planID)
     .then(res => {
@@ -136,8 +150,8 @@ function EverythingTracker(props) {
 
   // Create Day.
   function createDay(newDay) {
-    const planData = {day: newDay, userID: props.userID, planID: planID};
-    API.createDay(planData)
+    const dayData = {day: newDay, userID: userID, planID: planID};
+    API.createDay(dayData)
     .then(res => {
       loadDays(planID);
       loadLastDay(planID);
@@ -148,9 +162,21 @@ function EverythingTracker(props) {
     })
   }
 
+  // Update Day.
+  function updateDay(dayID) {
+    API.updateDay(dayID, bodyWeight)
+    .then(res => {
+      loadDays(planID);
+      loadDay(dayID);
+      console.log("Body Weight data updated: ", res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }  
+
   // Delete Day.
   function deleteDay(dayID) {
-    console.log("lastDay: ", lastDay);
     API.deleteDay(dayID)
     .then(res => {
       loadDays(planID);
@@ -186,10 +212,10 @@ function EverythingTracker(props) {
   }
 
   // Create Fitness.
-  function createFitness() {
-    const fitnessData = {...fitnessState, userID: props.userID, planID: planID, dayID: dayID}
-    API.createFitness(fitnessData)
+  function createFitness(data) {
+    API.createFitness(data)
     .then(res => {
+      loadFitnesses(dayID);
       console.log("Fitness data created: ", res.data)
     })
     .catch(err => {
@@ -201,10 +227,10 @@ function EverythingTracker(props) {
   function updateFitness(fitnessID) {
     API.updateFitness(fitnessID, fitnessState)
     .then(res => {
+      loadFitnesses(dayID);
       console.log("Fitness data updated: ", res.data)
     })
     .catch(err => {
-      console.log("fitness update got error!");
       console.log(err)
     })
   }
@@ -213,6 +239,7 @@ function EverythingTracker(props) {
   function deleteFitness(fitnessID) {
     API.deleteFitness(fitnessID)
     .then(res => {
+      loadFitnesses(dayID);
       console.log("Fitness data deleted: ", res.data)
     })
     .catch(err => {
@@ -244,10 +271,10 @@ function EverythingTracker(props) {
   }
 
   // Create Food.
-  function createFood() {
-    const foodData = {...foodState, userID: props.userID, planID: planID, dayID: dayID};
-    API.createFood(foodData)
+  function createFood(data) {
+    API.createFood(data)
     .then(res => {
+      loadFoods(dayID);
       console.log("Food data created: ", res.data)
     })
     .catch(err => {
@@ -262,7 +289,6 @@ function EverythingTracker(props) {
       console.log("Food data updated: ", res.data)
     })
     .catch(err => {
-      console.log("food update got error!");
       console.log(err)
     })
   }
@@ -271,6 +297,7 @@ function EverythingTracker(props) {
   function deleteFood(foodID) {
     API.deleteFood(foodID)
     .then(res => {
+      loadFoods(dayID);
       console.log("Food data deleted: ", res.data)
     })
     .catch(err => {
@@ -280,13 +307,13 @@ function EverythingTracker(props) {
 
   /* Plan event handling */
   const handlePlanEntry = e => {
-    console.log("e.targe.value: ", e.target.value);
     setPlanState({
       name: e.target.value
     });
   }
 
   const handlePlanChange = e => {
+    console.log("e.target: ", e.target);
     setPlanID(e.target.value);
   }
 
@@ -308,17 +335,32 @@ function EverythingTracker(props) {
 
   /*  Day event handling  */
   const handleDayChange = e => {
-    setDayID(e.target.value);
+    const id = e.target.value;
+    setDayID(id);
+    loadDay(id);
   }
 
   const handleSaveDay = e => {
+    e.preventDefault();
     let last = 0;
     if(lastDay.length) last = parseInt(lastDay[0].day);
     const newDay = last + 1;
     createDay(newDay);
   }
 
+  const handleBodyWeightEntry = e => {
+    setBodyWeight({
+      bodyWeight: e.target.value
+    });
+  }
+
+  const handleSaveBodyWeight = e => {
+    e.preventDefault();
+    updateDay(dayID);
+  }
+
   const handleDeleteDay = e => {
+    // e.preventDefault();
     const dayID = lastDay[0]._id;
     deleteDay(dayID);
   }
@@ -341,10 +383,14 @@ function EverythingTracker(props) {
   }
 
   const handleSaveFitness = e => {
-    // e.preventDefault();
+    e.preventDefault();
     if(e.target.name === "createBtn") {
+      const type = e.target.value;
+      const fitnessData = {...fitnessState, type:type, userID: userID, planID: planID, dayID: dayID};
       clearFitness(); // Reset the fitnessState with the initial values.
-      createFitness();
+      createFitness(fitnessData);
+      document.getElementById('newStrength').reset();
+      document.getElementById('newActivity').reset();
     }
     else {
       const fitnessID = e.target.value;
@@ -380,10 +426,12 @@ function EverythingTracker(props) {
   }
 
   const handleSaveFood = e => {
-    // e.preventDefault();
+    e.preventDefault();
     if(e.target.name === "createBtn") {
+      const foodData = {...foodState, userID: userID, planID: planID, dayID: dayID};
       clearFood();  // Reset the foodState with the initial values.
-      createFood();
+      createFood(foodData);
+      document.getElementById('newFood').reset();
     }
     else {
       const foodID = e.target.value;
@@ -393,7 +441,6 @@ function EverythingTracker(props) {
 
   const handleDeleteFood = e => {
     // e.preventDefault();
-    console.log("delete food e.target.value: ", e.target.value);
     const foodID = e.target.value;
     deleteFood(foodID);
   }
@@ -403,7 +450,7 @@ function EverythingTracker(props) {
   }
 
   return (
-    <Card className="containerCard">
+    <Card className="containerCard col-sm-12 col-lg-8 col-xl-6 mx-auto">
       <div>
         <h1>{props.nickname}'s BBF Tracker</h1>
       </div>
@@ -417,17 +464,23 @@ function EverythingTracker(props) {
           handleDeletePlan={handleDeletePlan}
         />
         <Dashboard 
-          userID={props.userID}
+          userID={userID}
           planID={planID}
+          days={days}
+          fitnesses={fitnesses}
+          foods={foods}
         />
         <Card className="containerCard">
         {props.plans.length > 0 ?
           <Day 
             days={days}
             lastDay={lastDay}
+            bodyWeight={bodyWeight}
             handleDayChange={handleDayChange}
             handleSaveDay={handleSaveDay}
             handleDeleteDay={handleDeleteDay}
+            handleBodyWeightEntry={handleBodyWeightEntry}
+            handleSaveBodyWeight={handleSaveBodyWeight}
           />
           : null
         }

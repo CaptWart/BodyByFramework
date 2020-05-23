@@ -5,7 +5,7 @@ function Food(props) {
   return (
     <div>
       {props.foods.map(food => 
-        <Accordion>
+        <Accordion key={food._id}>
           <Card>
             <Card.Header>
               <Accordion.Toggle
@@ -91,7 +91,7 @@ function Food(props) {
           </Card.Header>
           <Accordion.Collapse eventKey="new">
             <Card.Body>
-              <Form>
+              <Form id="newFood">
                 <Form.Group>
                   <Form.Label>Item</Form.Label>
                   <Form.Control

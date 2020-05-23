@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import API from "../Utils/API";
 import "./style.css";
@@ -8,10 +8,12 @@ function Plan(props) {
   const [showEditPlan, setShowEditPlan] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState({});
 
+  useEffect(() => {
+    loadPlan(props.selectedPlan);
+  }, [props.selectedPlan])
+
   const onClickCreatePlan = () => setShowCreatePlan(!showCreatePlan);
   const onClickEditPlan = () => {
-    console.log("selectedPlan: ", selectedPlan);
-    loadPlan(props.selectedPlan);
     setShowEditPlan(!showEditPlan);
   }
 
@@ -64,7 +66,7 @@ function Plan(props) {
           <label>Select Your Plan</label><br/>
           <select onChange={props.handlePlanChange}>
             {props.plans.map(plan => (
-              <option value={plan._id}>{plan.name}</option>
+              <option key={plan._id} value={plan._id}>{plan.name}</option>
             ))}
           </select>
           <Button
