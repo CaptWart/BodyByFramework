@@ -52,8 +52,8 @@ function Day(props) {
             ))}
           </select>
           <Card>
-            <Form>
-              <Form.Group>
+            <Form className="p-2">
+              <Form.Group className="mb-2">
                 <Form.Label>Body Weight</Form.Label>
                   <Form.Control
                     id="bodyWeight"

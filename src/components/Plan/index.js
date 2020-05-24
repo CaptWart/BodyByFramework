@@ -82,7 +82,7 @@ function Plan(props) {
 
       {showEditPlan &&
         <Card>
-          <Form>
+          <Form className="p-2">
             <Form.Group>
               <Form.Label>Plan Name</Form.Label>
                 <Form.Control

@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Card, Col, Row } from "react-bootstrap";
+import { Card, Row, Col, Button } from "react-bootstrap";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import * as am4plugins_forceDirected from "@amcharts/amcharts4/plugins/forceDirected";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import domtoimage from "dom-to-image";
+import { saveAs } from 'file-saver';
 import API from "../Utils/API";
 import "./style.css";
 
 am4core.useTheme(am4themes_animated);
 
 function Dashboard(props) {
+  const imgCount = 0;
+  const [allFitnesses, setAllFitnesses] = useState([]);
+  const [allFoods, setAllFoods] = useState([]);
   const [totalWeightMoved, setTotalWeightMoved] = useState(0);
   const [totalCalories, setTotalCalories] = useState(0);
   const [totalMoneySpent, setTotalMoneySpent] = useState(0);
@@ -48,7 +53,7 @@ function Dashboard(props) {
     ]
   }];
 
-  const createXYChartData = (data) => {
+  const createXYChartData = data => {
     const daysData = data.map(day => {
       return {day:day.day, bodyWeight: day.bodyWeight};
     });
@@ -57,12 +62,38 @@ function Dashboard(props) {
 
   const xyChartData = createXYChartData(props.days);
 
+  const createPieChartData = data => {
+    if(data.length) {
+      const workoutArr = data.map(fitness => {return fitness.workout});
+      const numWorkouts = [];
+      workoutArr.forEach(currWorkout => {
+        const numExist = numWorkouts.filter(item => item.workout === currWorkout);
+        if(numExist.length === 0) {
+          const numItems = workoutArr.filter(workout => workout === currWorkout);
+          const uniqueWorkout = {workout: currWorkout, nums: numItems.length};
+          numWorkouts.push(uniqueWorkout);
+        }
+      });
+      return numWorkouts;
+    }
+  }
+
+  const pieChartData = createPieChartData(allFitnesses);
+
   let iconPath = "M53.5,476c0,14,6.833,21,20.5,21s20.5-7,20.5-21V287h21v189c0,14,6.834,21,20.5,21 c13.667,0,20.5-7,20.5-21V154h10v116c0,7.334,2.5,12.667,7.5,16s10.167,3.333,15.5,0s8-8.667,8-16V145c0-13.334-4.5-23.667-13.5-31 s-21.5-11-37.5-11h-82c-15.333,0-27.833,3.333-37.5,10s-14.5,17-14.5,31v133c0,6,2.667,10.333,8,13s10.5,2.667,15.5,0s7.5-7,7.5-13 V154h10V476 M61.5,42.5c0,11.667,4.167,21.667,12.5,30S92.333,85,104,85s21.667-4.167,30-12.5S146.5,54,146.5,42 c0-11.335-4.167-21.168-12.5-29.5C125.667,4.167,115.667,0,104,0S82.333,4.167,74,12.5S61.5,30.833,61.5,42.5z";
 
   useEffect(() => {
-    getTotalCaloriesAndMoney(props.planID);
-    getTotalWeightMoved(props.planID);
+    loadAllFoods(props.planID);
+    loadAllFitnesses(props.planID);
   }, [props.planID, props.fitnesses, props.foods]);
+
+  useEffect(() => {
+    getTotalWeightMoved(allFitnesses);
+  }, [allFitnesses]);
+
+  useEffect(() => {
+    getTotalCaloriesAndMoney(allFoods);
+  }, [allFoods]);
 
   useEffect(() => {
     createFunnelChart(slicedChartData);
@@ -81,7 +112,17 @@ function Dashboard(props) {
 
   useEffect(() => {
     createXYChart(xyChartData);
-  }, [xyChartData])
+    return () => {
+      am4core.disposeAllCharts();
+    }
+  }, [xyChartData]);
+
+  useEffect(() => {
+    createPieChart(pieChartData);
+    return () => {
+      am4core.disposeAllCharts();
+    }
+  }, [pieChartData]);
 
   const createFunnelChart = data => {
     let chart = am4core.create("funnelChart", am4charts.SlicedChart);
@@ -98,14 +139,6 @@ function Dashboard(props) {
     
     series.labelsContainer.paddingLeft = 15;
     series.labelsContainer.width = 200;
-    
-    // series.orientation = "horizontal";
-    //series.bottomRatio = 1;
-
-    // chart.legend = new am4charts.Legend();
-    // chart.legend.position = "left";
-    // chart.legend.valign = "bottom";
-    // chart.legend.margin(5,5,5,5);
   }
 
   const createForceDirectedTree = data => {
@@ -136,7 +169,6 @@ function Dashboard(props) {
       if (event.target.dataItem.parentLink) {
         event.target.dataItem.parentLink.isHover = true;
       }
-    
     })
     
     networkSeries.nodes.template.events.on("out", function(event) {
@@ -165,10 +197,6 @@ function Dashboard(props) {
     series.ticks.template.locationY = 0.5;
     
     series.labelsContainer.width = 200;
-    
-    // chart.legend = new am4charts.Legend();
-    // chart.legend.position = "left";
-    // chart.legend.valign = "bottom";
   }
 
   const createXYChart = data => {
@@ -194,85 +222,180 @@ function Dashboard(props) {
     // Add simple bullet
     let bullet = lineSeries.bullets.push(new am4charts.Bullet());
     let image = bullet.createChild(am4core.Image);
-    image.href = "https://www.amcharts.com/lib/images/star.svg";
+    // image.href = "https://www.amcharts.com/lib/images/star.svg";
+    image.href = "/star.png";
     image.width = 30;
     image.height = 30;
     image.horizontalCenter = "middle";
     image.verticalCenter = "middle";
   }
 
-  const getTotalWeightMoved = planID => {
-    API.getAllFitnesses(planID)
-    .then(res => {
-      const fitnessData = res.data;
-      let total = 0;
-      if(fitnessData.length) {
-        const weights = fitnessData.map(fitness => {
-          let weight;
-          if(fitness.weight > 0) weight = fitness.weight;
-          else weight = 1;
-          return weight * fitness.sets * fitness.reps;
-        });
-        total = weights.reduce((acc, cur) => acc + cur);
-      }
-      setTotalWeightMoved(total);
-    })
+  const createPieChart = data => {
+    let chart = am4core.create("pieChart", am4charts.PieChart3D);
+    chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+    chart.data = data;
+
+    chart.innerRadius = am4core.percent(40);
+    chart.depth = 120;
+
+    let series = chart.series.push(new am4charts.PieSeries3D());
+    series.dataFields.value = "nums";
+    series.dataFields.depthValue = "nums";
+    series.dataFields.category = "workout";
+    series.slices.template.cornerRadius = 5;
+    series.colors.step = 3;
   }
 
-  const getTotalCaloriesAndMoney = planID => {
-    API.getAllFoods(planID)
+  const loadAllFitnesses = planID => {
+    API.getAllFitnesses(planID)
     .then(res => {
-      const foodData = res.data;
-      let totalCal = 0;
-      let totalPrice = 0;
-        if(foodData.length) {
-        const calories = foodData.map(food => food.calories);
-        totalCal= calories.reduce((acc, cur) => acc + cur);
-
-        const prices = foodData.map(food => food.price);
-        totalPrice = prices.reduce((acc, cur) => acc + cur);
-      }
-      setTotalCalories(totalCal);
-      setTotalMoneySpent(totalPrice);
+      setAllFitnesses(res.data);
     })
     .catch(err => {
       console.log(err);
+    });
+  }
+
+  const loadAllFoods = planID => {
+    API.getAllFoods(planID)
+    .then(res => {
+      setAllFoods(res.data);
     })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
+  // Calculate total weight moved
+  const getTotalWeightMoved = data => {
+    let total = 0;
+    if(data.length) {
+      const weights = data.map(fitness => {
+        let weight;
+        if(fitness.weight > 0) weight = fitness.weight;
+        else weight = 1;
+        return weight * fitness.sets * fitness.reps;
+      });
+      total = weights.reduce((acc, cur) => acc + cur);
+    }
+    setTotalWeightMoved(total);
+  }
+
+  // Calculate total calories and money spent
+  const getTotalCaloriesAndMoney = data => {
+    let totalCal = 0;
+    let totalPrice = 0;
+      if(data.length) {
+      const calories = data.map(food => food.calories);
+      totalCal= calories.reduce((acc, cur) => acc + cur);
+
+      const prices = data.map(food => food.price);
+      totalPrice = prices.reduce((acc, cur) => acc + cur);
+    }
+    setTotalCalories(totalCal);
+    setTotalMoneySpent(totalPrice);
+  }
+
+  // Chart checkbox event handling
+  const handleChartSelect = e => {
+    console.log("e.target.checked: ", e.target.checked);
+    const chartID = e.target.getAttribute("data-id");
+    const chartImg = document.getElementById(chartID);
+    const saveImage = document.getElementById("imageToSave");
+    
+    if(e.target.checked) {
+      domtoimage.toPng(chartImg)
+      .then(function (dataUrl) {
+          var img = new Image();
+          img.src = dataUrl;
+          img.setAttribute("id", `${chartID}-img`);
+          saveImage.appendChild(img);
+          console.log("saveImage: ", document.getElementById('imageToSave'));
+      })
+      .catch(err => {
+          console.error('oops, something went wrong!', err);
+      });
+    } else {
+      saveImage.removeChild(document.getElementById(`${chartID}-img`));
+    }
+  }
+
+  // Save(download) the image(png) of selected charts
+  const saveImage = e => {
+    const finalImg = document.getElementById('imageToSave');
+
+    domtoimage.toBlob(finalImg)
+    .then(function (blob) {
+        saveAs(blob, 'chartImage.png');
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   return (
     <Card className="containerCard">
       <h2>Dashboard</h2>
+      <Button variant="primary" size="small" onClick={saveImage}>Save Chart Image</Button>
+      <Card id="imageToSave"></Card>
       <Row>
       <Col sm={12} lg={6}>
         <Card>
-          <h3>Everything Chart</h3>
-          <div id="funnelChart"></div>
+          <Row>
+          <Col xsm={10}><h3>Everything Chart</h3></Col>
+          <Col xsm={2} className="text-right"><input data-id="funnelChart" type="checkbox" onClick={handleChartSelect}></input></Col>
+          </Row>
+          <div id="funnelChart" class="chart" ></div>
         </Card>
       </Col>
       <Col sm={12} lg={6}>
         <Card>
-          <h3>Everything Tree</h3>
-          <div id="forceDirectedTree"></div>
+          <Row>
+            <Col xsm={10}><h3>Everything Tree</h3></Col>
+            <Col xsm={2} className="text-right"><input data-id="forceDirectedTree" type="checkbox" onClick={handleChartSelect}></input></Col>
+          </Row>
+          <div id="forceDirectedTree" class="chart" ></div>
         </Card>
       </Col>
       <Col sm={12} lg={6}>
         <Card>
-          <h3>What You Are</h3>
-          <div id="pictorialStackedChart"></div>
+          <Row>
+            <Col xsm={10}><h3>What You Are</h3></Col>
+            <Col xsm={2} className="text-right"><input data-id="pictorialStackedChart" type="checkbox" onClick={handleChartSelect}></input></Col>
+          </Row>
+          <div id="pictorialStackedChart" class="chart" ></div>
         </Card>
       </Col>
       <Col sm={12} lg={6}>
         <Card>
-          <h3>Body Weight by Day</h3>
-          <div id="xyChart"></div>
+          <Row>
+            <Col xsm={10}><h3>Body Weight by Day</h3></Col>
+            <Col xsm={2} className="text-right"><input data-id="xyChart" type="checkbox" onClick={handleChartSelect}></input></Col>
+          </Row>
+          <div id="xyChart" class="chart" ></div>
         </Card>
       </Col>
       <Col sm={12} lg={6}>
-        <Card id="dataSummary">
-          <h3>Total Calories: <span className="calcResult">{totalCalories} cal</span></h3>
-          <h3>Total Money Spent: <span className="calcResult">$ {totalMoneySpent}</span></h3>
-          <h3>Total Weight Moved: <span className="calcResult">{totalWeightMoved} lbs</span></h3>
+        <Card>
+          <Row>
+            <Col xsm={10}><h3>Fitness Pie Chart</h3></Col>
+            <Col xsm={2} className="text-right"><input data-id="pieChart" type="checkbox" onClick={handleChartSelect}></input></Col>
+          </Row>
+          <div id="pieChart" class="chart" ></div>
+        </Card>
+      </Col>
+      <Col sm={12} lg={6}>
+        <Card>
+          <Row>
+            <Col xsm={10}><h3>Data Summary</h3></Col>
+            <Col xsm={2} className="text-right"><input data-id="dataSummary" type="checkbox" onClick={handleChartSelect}></input></Col>
+          </Row>
+          <div id="dataSummary" class="chart" >
+            <h3>Total Calories: <span className="calcResult">{totalCalories} cal</span></h3>
+            <h3>Total Money Spent: <span className="calcResult">$ {totalMoneySpent}</span></h3>
+            <h3>Total Weight Moved: <span className="calcResult">{totalWeightMoved} lbs</span></h3>
+          </div>
         </Card>
       </Col>
       </Row>
