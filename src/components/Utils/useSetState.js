@@ -1,8 +1,6 @@
 import { useReducer } from 'react';
 
 const reducer = (previousState = {}, updatedState = {}) => {
-  console.log("previousState: ", previousState);
-  console.log("updateState: ", updatedState);
   return { ...previousState, ...updatedState };
 };
 
