@@ -2,3 +2,7 @@
   color: #0683d7;
   font-size: 1.5em;
 }
+
+.chart {
+  height: 300px !important;
+}

@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Row, Col, Button } from "react-bootstrap";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import * as am4plugins_forceDirected from "@amcharts/amcharts4/plugins/forceDirected";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import domtoimage from "dom-to-image";
+import { saveAs } from 'file-saver';
 import API from "../Utils/API";
 import "./style.css";
 
 am4core.useTheme(am4themes_animated);
 
 function Dashboard(props) {
+  const imgCount = 0;
   const [allFitnesses, setAllFitnesses] = useState([]);
   const [allFoods, setAllFoods] = useState([]);
   const [totalWeightMoved, setTotalWeightMoved] = useState(0);
@@ -219,7 +222,8 @@ function Dashboard(props) {
     // Add simple bullet
     let bullet = lineSeries.bullets.push(new am4charts.Bullet());
     let image = bullet.createChild(am4core.Image);
-    image.href = "https://www.amcharts.com/lib/images/star.svg";
+    // image.href = "https://www.amcharts.com/lib/images/star.svg";
+    image.href = "/star.png";
     image.width = 30;
     image.height = 30;
     image.horizontalCenter = "middle";
@@ -293,45 +297,105 @@ function Dashboard(props) {
     setTotalMoneySpent(totalPrice);
   }
 
+  // Chart checkbox event handling
+  const handleChartSelect = e => {
+    console.log("e.target.checked: ", e.target.checked);
+    const chartID = e.target.getAttribute("data-id");
+    const chartImg = document.getElementById(chartID);
+    const saveImage = document.getElementById("imageToSave");
+    
+    if(e.target.checked) {
+      domtoimage.toPng(chartImg)
+      .then(function (dataUrl) {
+          var img = new Image();
+          img.src = dataUrl;
+          img.setAttribute("id", `${chartID}-img`);
+          saveImage.appendChild(img);
+          console.log("saveImage: ", document.getElementById('imageToSave'));
+      })
+      .catch(err => {
+          console.error('oops, something went wrong!', err);
+      });
+    } else {
+      saveImage.removeChild(document.getElementById(`${chartID}-img`));
+    }
+  }
+
+  // Save(download) the image(png) of selected charts
+  const saveImage = e => {
+    const finalImg = document.getElementById('imageToSave');
+
+    domtoimage.toBlob(finalImg)
+    .then(function (blob) {
+        saveAs(blob, 'chartImage.png');
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
   return (
     <Card className="containerCard">
       <h2>Dashboard</h2>
+      <Button variant="primary" size="small" onClick={saveImage}>Save Chart Image</Button>
+      <Card id="imageToSave"></Card>
       <Row>
       <Col sm={12} lg={6}>
         <Card>
-          <h3>Everything Chart</h3>
-          <div id="funnelChart"></div>
+          <Row>
+          <Col xsm={10}><h3>Everything Chart</h3></Col>
+          <Col xsm={2} className="text-right"><input data-id="funnelChart" type="checkbox" onClick={handleChartSelect}></input></Col>
+          </Row>
+          <div id="funnelChart" class="chart" ></div>
         </Card>
       </Col>
       <Col sm={12} lg={6}>
         <Card>
-          <h3>Everything Tree</h3>
-          <div id="forceDirectedTree"></div>
+          <Row>
+            <Col xsm={10}><h3>Everything Tree</h3></Col>
+            <Col xsm={2} className="text-right"><input data-id="forceDirectedTree" type="checkbox" onClick={handleChartSelect}></input></Col>
+          </Row>
+          <div id="forceDirectedTree" class="chart" ></div>
         </Card>
       </Col>
       <Col sm={12} lg={6}>
         <Card>
-          <h3>What You Are</h3>
-          <div id="pictorialStackedChart"></div>
+          <Row>
+            <Col xsm={10}><h3>What You Are</h3></Col>
+            <Col xsm={2} className="text-right"><input data-id="pictorialStackedChart" type="checkbox" onClick={handleChartSelect}></input></Col>
+          </Row>
+          <div id="pictorialStackedChart" class="chart" ></div>
         </Card>
       </Col>
       <Col sm={12} lg={6}>
         <Card>
-          <h3>Body Weight by Day</h3>
-          <div id="xyChart"></div>
+          <Row>
+            <Col xsm={10}><h3>Body Weight by Day</h3></Col>
+            <Col xsm={2} className="text-right"><input data-id="xyChart" type="checkbox" onClick={handleChartSelect}></input></Col>
+          </Row>
+          <div id="xyChart" class="chart" ></div>
         </Card>
       </Col>
       <Col sm={12} lg={6}>
         <Card>
-          <h3>Fitness Pie Chart</h3>
-          <div id="pieChart"></div>
+          <Row>
+            <Col xsm={10}><h3>Fitness Pie Chart</h3></Col>
+            <Col xsm={2} className="text-right"><input data-id="pieChart" type="checkbox" onClick={handleChartSelect}></input></Col>
+          </Row>
+          <div id="pieChart" class="chart" ></div>
         </Card>
       </Col>
       <Col sm={12} lg={6}>
-        <Card id="dataSummary">
-          <h3>Total Calories: <span className="calcResult">{totalCalories} cal</span></h3>
-          <h3>Total Money Spent: <span className="calcResult">$ {totalMoneySpent}</span></h3>
-          <h3>Total Weight Moved: <span className="calcResult">{totalWeightMoved} lbs</span></h3>
+        <Card>
+          <Row>
+            <Col xsm={10}><h3>Data Summary</h3></Col>
+            <Col xsm={2} className="text-right"><input data-id="dataSummary" type="checkbox" onClick={handleChartSelect}></input></Col>
+          </Row>
+          <div id="dataSummary" class="chart" >
+            <h3>Total Calories: <span className="calcResult">{totalCalories} cal</span></h3>
+            <h3>Total Money Spent: <span className="calcResult">$ {totalMoneySpent}</span></h3>
+            <h3>Total Weight Moved: <span className="calcResult">{totalWeightMoved} lbs</span></h3>
+          </div>
         </Card>
       </Col>
       </Row>
