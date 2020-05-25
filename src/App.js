@@ -12,6 +12,7 @@ import { ForgotChange } from './components/Pages/ForgotChange/forgotChange';
 import { ChangePassword } from './components/Pages/ChangePassword/changePassword';
 import { Verify } from './components/Pages/Verify/verify';
 import { Verified } from './components/Pages/Verified/verified';
+import TeamPage from './components/Pages/Team/teampage';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route exact path="/changepassword" component={ChangePassword} />
         <Route exact path="/verify" component={Verify} />
         <Route exact path="/verified" component={Verified} />
+        <Route exact path="/team" component={TeamPage} />
 
       </Router>
     </div>

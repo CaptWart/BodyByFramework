@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import phone from './phone.jpg'
 import { Row, Col, Container } from "react-bootstrap"
+import bbf from './images/bbf.png'
+
 
 export function Login(props) {
   const [email, setEmail] = useState("");
@@ -35,15 +37,10 @@ export function Login(props) {
   }
   return (
     <div>
-      <Container>
-      <Row>
-      <Col xs={6}>
-        <img src={phone}/>
-      </Col>
-      <Col id='login'>
-      <form onSubmit={handleSubmit}>
-        <h1>Body By Framework</h1>
-        <br></br>
+      <form id='mainframe' onSubmit={handleSubmit}>
+      <img style={{width: '100%'}} src={bbf}></img>
+                <br></br>
+                <br></br>
         <input
           type="text"
           placeholder="Email"
@@ -65,12 +62,9 @@ export function Login(props) {
           style={{ display: badLogin }}>
           Bad login credentials
       </label>
-      </form>
       <p> <a href="/forgotpassword">Forgot password</a></p>
       <p> Don't have an account <a href="/create">create</a> one!</p>
-      </Col>
-      </Row>
-      </Container>
+      </form>
     </div>
   );
 }

@@ -1,39 +1,40 @@
-* { padding: 0; margin: 0; }
 li{
     float: left;
     margin: 0 15px;
     list-style-type: none;
 }
 ul{
-    width: 50%;
+    width: 40%;
     margin: auto;
 }
 #footer{
 margin-top: 20px;
 }
-/* .frontBox{
+.frontBox{
     height: 600px;
     width: 50%;
     position: fixed;
     top: auto;
+    /* background-color: white; */
     position: relative;
+    /* top: 30px; */
     animation: grow 2s;
     margin: auto;
     color: white;
-} */
-.homeApp{
-    height: 85%
 }
-
-.mainbox{
-    min-height: 100% !important;
+html {
     height: 100%;
+}
+/* .mainbox{
+    height: 500px;
     background-size: cover;
     position: relative;
     background-image: url('images/PurplePattern.jpg');
+
+} */
+#meetTheTeam{
+    width: 330px;
 }
-
-
 #copyright{
     float: right;
 }
@@ -52,22 +53,31 @@ a{
     color: white;
     text-align: center;
 }
-#info{
-    padding-top: 100px;
+#teamInfo{
+    padding-top: 30px;
+    padding-bottom: 30px;
     /* margin-top: 80px;
     margin-bottom: 80px; */
-    height: 480px;
-    width: 350px;
     color: white;
     text-shadow: 1px 2px 4px black;
     text-align: center;
     margin: auto;
+    width: 60%;
+
 }
+.teambox{
+    background-size: cover;
+    position: relative;
+    background-image: url('images/TeamBackground.jpg');
+}
+
 .section{
     /* background-image: url('images/background.jpg'); */
 
 }
-
+.portrait{
+    float: right;
+}
 
 /* .climb{
     animation: slideRight 800ms;
