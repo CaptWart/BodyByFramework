@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import API from "../Utils/API";
 import "./style.css";
@@ -8,10 +8,12 @@ function Plan(props) {
   const [showEditPlan, setShowEditPlan] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState({});
 
+  useEffect(() => {
+    loadPlan(props.selectedPlan);
+  }, [props.selectedPlan])
+
   const onClickCreatePlan = () => setShowCreatePlan(!showCreatePlan);
   const onClickEditPlan = () => {
-    console.log("selectedPlan: ", selectedPlan);
-    loadPlan(props.selectedPlan);
     setShowEditPlan(!showEditPlan);
   }
 
@@ -47,9 +49,11 @@ function Plan(props) {
                   onChange={props.handlePlanEntry}
                 />
             </Form.Group>
+            <div id="planAlert" className="alert">Plan name needs to be entered.</div>
             <Button
               name="createBtn"
               variant="primary" 
+              size="sm"
               type="submit" 
               onClick={props.handleSavePlan}
             >
@@ -64,12 +68,13 @@ function Plan(props) {
           <label>Select Your Plan</label><br/>
           <select onChange={props.handlePlanChange}>
             {props.plans.map(plan => (
-              <option value={plan._id}>{plan.name}</option>
+              <option key={plan._id} value={plan._id}>{plan.name}</option>
             ))}
           </select>
           <Button
             name="createBtn"
-            variant="primary" 
+            variant="primary"
+            size="sm"
             type="submit"
             onClick={onClickEditPlan}
           >
@@ -80,20 +85,22 @@ function Plan(props) {
 
       {showEditPlan &&
         <Card>
-          <Form>
+          <Form className="p-2">
             <Form.Group>
               <Form.Label>Plan Name</Form.Label>
                 <Form.Control
-                  id="newPlanName"
+                  id="existingPlanName"
                   name="name"
                   type="text"
                   defaultValue={selectedPlan.name}
                   onChange={props.handlePlanEntry}
                 />
             </Form.Group>
+            <div id="planEditAlert" className="alert">Plan name needs to be entered.</div>
             <Button
               name="updateBtn"
-              variant="primary" 
+              variant="primary"
+              size="sm" 
               type="submit"
               value={selectedPlan._id}
               onClick={props.handleSavePlan}
@@ -102,7 +109,8 @@ function Plan(props) {
             </Button>
             <Button
               name="deleteBtn"
-              variant="danger" 
+              variant="danger"
+              size="sm" 
               type="submit"
               className="ml-2"
               value={selectedPlan._id}

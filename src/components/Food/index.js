@@ -5,7 +5,7 @@ function Food(props) {
   return (
     <div>
       {props.foods.map(food => 
-        <Accordion>
+        <Accordion key={food._id}>
           <Card>
             <Card.Header>
               <Accordion.Toggle
@@ -54,6 +54,7 @@ function Food(props) {
                   <Button
                     name="updateBtn"
                     variant="primary"
+                    size="sm"
                     type="submit"
                     value={food._id}
                     onClick={props.handleSaveFood}
@@ -63,6 +64,7 @@ function Food(props) {
                   <Button
                     name="deleteBtn"
                     variant="danger"
+                    size="sm"
                     className="mx-2"
                     type="submit" 
                     value={food._id} 
@@ -91,7 +93,7 @@ function Food(props) {
           </Card.Header>
           <Accordion.Collapse eventKey="new">
             <Card.Body>
-              <Form>
+              <Form id="newFood">
                 <Form.Group>
                   <Form.Label>Item</Form.Label>
                   <Form.Control
@@ -116,9 +118,13 @@ function Food(props) {
                     onChange={props.handleFoodEntry} 
                   />
                 </Form.Group>
+                <div id="foodSaveAlert" className="alert">
+                  Please enter valid data: "Item" name is required. All other data must be numbers.
+                </div>
                 <Button
                   name="createBtn"
-                  variant="primary" 
+                  variant="primary"
+                  size="sm"
                   type="submit" 
                   onClick={props.handleSaveFood}
                 >

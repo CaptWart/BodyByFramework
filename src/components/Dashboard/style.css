@@ -2,3 +2,22 @@
   color: #0683d7;
   font-size: 1.5em;
 }
+
+.dispData {
+  background-color: white;
+  height: 296px !important;
+  width: 274px !important;
+}
+
+.pieChartData {
+  background-color: white;
+  height: 300px !important;
+  width: 350px !important;
+}
+
+#imageToSave {
+  background-color: white;
+  height: 296px !important;
+  width: 274px !important;
+}
+
