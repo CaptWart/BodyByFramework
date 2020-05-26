@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import phone from './phone.jpg'
-import { Row, Col, Container } from "react-bootstrap"
 import bbf from './images/bbf.png'
 
 
@@ -38,7 +35,7 @@ export function Login(props) {
   return (
     <div>
       <form id='mainframe' onSubmit={handleSubmit}>
-      <img style={{width: '100%'}} src={bbf}></img>
+      <img style={{width: '100%'}} alt="Body By Framework" src={bbf}></img>
                 <br></br>
                 <br></br>
         <input

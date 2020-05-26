@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import './style.css';
 import bbf from './images/bbf.png'
 export function Create(props) {
@@ -49,11 +48,12 @@ export function Create(props) {
         else {
             setPasswordCheck("none")
         }
-
-        if (!email || !password || !nickname || !ageCheck || !policyCheck) {
+        if ((!email || !password || !nickname || !ageCheck || !policyCheck) && (!emailFormat.test(email) || !passwordFormat.test(password))) {
+            console.log("bad")
+        }
+        if (!email || !password || !nickname || !ageCheck || !policyCheck || !emailFormat.test(email) || !passwordFormat.test(password)) {
             setBadForm("block")
         }
-
 
         else {
             fetch('http://ec2-3-13-138-147.us-east-2.compute.amazonaws.com/createUser', {
@@ -83,7 +83,7 @@ export function Create(props) {
     return (
         <div>
             <form id='mainframe' onSubmit={handleSubmit}>
-                <img style={{width: '100%'}} src={bbf}></img>
+                <img style={{width: '100%'}} alt="Body By Framework" src={bbf}></img>
                 <br></br>
                 <br></br>
                 <input

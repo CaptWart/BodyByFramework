@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 
 export function ChangePassword() {
   const [user, setUser] = useState([]);
@@ -23,7 +22,7 @@ export function ChangePassword() {
     }
     fetchUser()
 
-}, []);
+}, [user]);
 
 
   

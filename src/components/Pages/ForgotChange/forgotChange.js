@@ -1,44 +1,59 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
 export function ForgotChange() {
   const [password, setPassword] = useState("");
+  const passwordFormat = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
+  const [passwordCheck, setPasswordCheck] = useState("none")
 
   console.log(window.location.search)
   const handleSubmit = (evt) => {
       console.log(password)
     evt.preventDefault();
 
-  var headers = new Headers();
-  headers.append('Content-Type', 'application/json');
-  headers.append('Accept', 'application/json');
 
-    fetch('http://ec2-3-13-138-147.us-east-2.compute.amazonaws.com/passwordReset'+window.location.search, {
-      method: 'POST',
-      credentials: "include",
-      headers: headers,
-      body: JSON.stringify({ "password": password,})
-    })
-      .then(response => {
-        if (response.status === 401 || response.status === 422) {
-          console.log("bad")
+    if (!passwordFormat.test(password)){
+      setPasswordCheck("block")
+    }
+    else {
+        setPasswordCheck("none")
+        var headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+      
+          fetch('http://ec2-3-13-138-147.us-east-2.compute.amazonaws.com/passwordReset'+window.location.search, {
+            method: 'POST',
+            credentials: "include",
+            headers: headers,
+            body: JSON.stringify({ "password": password,})
+          })
+            .then(response => {
+              if (response.status === 401 || response.status === 422) {
+                console.log("bad")
+              }
+              else {
+                window.location.href = "/login";
+                console.log("changed")
+              }
+            })
         }
-        else {
-          window.location.href = "/login";
-          console.log("changed")
-        }
-      })
-  }
+    }
+
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h1>Enter your email</h1>
+        <h1>Enter your new password</h1>
         <input
           type="password"
           placeholder="New Password"
           value={password}
           onChange={e => setPassword(e.target.value)}
         />
+        <label
+          className="inputs"
+          style={{ display: passwordCheck }}>
+          Password must be at least 8 characters, have an uppercase, lowercase and number
+        </label>
         <br></br>
         <input type="submit" value="Change Password" />
       </form>
