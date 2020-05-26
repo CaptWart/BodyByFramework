@@ -31,12 +31,12 @@ function Day(props) {
           <Alert show={showAlert} variant="danger">
           <Alert.Heading>Are you sure?</Alert.Heading>
           <p>
-            You are about to delete all the fitness and food data associated with 
+            You are about to delete all the data associated with 
             <span class="dayToDelete"> Day {props.days[props.days.length -1].day}.</span>
           </p>
           <div className="d-flex justify-content-end">
-            <Button onClick={() => setShowAlert(false)} variant="outline-primary">Cancel</Button>
-            <Button onClick={() => {props.handleDeleteDay(); setShowAlert(false);}} variant="outline-danger">Delete</Button>
+            <Button onClick={() => setShowAlert(false)} variant="primary" size="sm">Cancel</Button>
+            <Button onClick={() => {props.handleDeleteDay(); setShowAlert(false);}} variant="danger" size="sm">Delete</Button>
           </div>
           </Alert>
         </span>
@@ -60,13 +60,15 @@ function Day(props) {
                     name="bodyWeight"
                     type="text"
                     defaultValue={props.bodyWeight}
+                    // value={props.bodyWeight}
                     onChange={props.handleBodyWeightEntry}
                   />
               </Form.Group>
               <Button
                 name="createBtn"
                 variant="primary" 
-                type="submit" 
+                size="sm"
+                type="submit"
                 onClick={props.handleSaveBodyWeight}
               >
                 Save

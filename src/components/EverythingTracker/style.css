@@ -24,6 +24,10 @@ h3, .dayToDelete {
   color: #ED3D63 !important;
 }
 
+h4 {
+  font-size: 1em !important;
+}
+
 label {
   color: #223CCF;
 
@@ -44,4 +48,8 @@ button {
 
 .card-body {
   padding: 0.5em !important;
+}
+
+.alert-heading {
+  font-size: 1em !important;
 }

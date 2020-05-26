@@ -54,6 +54,7 @@ function Food(props) {
                   <Button
                     name="updateBtn"
                     variant="primary"
+                    size="sm"
                     type="submit"
                     value={food._id}
                     onClick={props.handleSaveFood}
@@ -63,6 +64,7 @@ function Food(props) {
                   <Button
                     name="deleteBtn"
                     variant="danger"
+                    size="sm"
                     className="mx-2"
                     type="submit" 
                     value={food._id} 
@@ -118,7 +120,8 @@ function Food(props) {
                 </Form.Group>
                 <Button
                   name="createBtn"
-                  variant="primary" 
+                  variant="primary"
+                  size="sm"
                   type="submit" 
                   onClick={props.handleSaveFood}
                 >

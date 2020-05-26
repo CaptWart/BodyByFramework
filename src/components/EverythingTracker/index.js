@@ -39,11 +39,13 @@ function EverythingTracker(props) {
   const [previousFood, setPreviousFood] = useState({});
   const [fitnessState, setFitnessState] = useSetState(previousFitness);
   const [foodState, setFoodState] = useSetState(previousFood);
+  const [plans, setPlans] = useState([]);
 
   // Call setPlanID when props.plans are passed (beginning).
   useEffect(() => {
     const plans = props.plans;
     if(plans.length) {
+      setPlans(props.plans);
       setPlanID(plans[0]._id);
     }
   }, [props.plans]);
@@ -81,11 +83,21 @@ function EverythingTracker(props) {
   }, [foodState]);
 
   /* Plan(s) API call */
+  // Load Plans of the user
+  function loadPlans(userID) {
+    API.getAllPlans(userID)
+      .then(res => {
+        setPlans(res.data)
+      })
+      .catch(err => console.log(err));
+  };
+
   // Create Plan.
   function createPlan() {
     const planData = {...planState, userID: userID};
     API.createPlan(planData)
     .then(res => {
+      loadPlans(userID);
       console.log("Plan data created: ", res.data)
     })
     .catch(err => {
@@ -97,6 +109,7 @@ function EverythingTracker(props) {
   function updatePlan(planID) {
     API.updatePlan(planID, planState)
     .then(res => {
+      loadPlans(userID);
       console.log("Plan data updated: ", res.data)
     })
     .catch(err => {
@@ -108,6 +121,7 @@ function EverythingTracker(props) {
    function deletePlan(planID) {
     API.deletePlan(planID)
     .then(res => {
+      loadPlans(userID);
       console.log("Fitness data deleted: ", res.data)
     })
     .catch(err => {
@@ -318,9 +332,16 @@ function EverythingTracker(props) {
   }
 
   const handleSavePlan = e => {
-    // e.preventDefault()
+    e.preventDefault();
+    console.log("newPlanName element: ", document.getElementById("newPlanName").value);
+    
     if(e.target.name === "createBtn") {
-      createPlan();
+      if(document.getElementById("newPlanName").value === "") {
+        document.getElementById("planAlert").style.display = "block";        
+      } else {
+        document.getElementById("planAlert").style.display = "none";
+        createPlan();
+      }
     }
     else {
       const planID = e.target.value;
@@ -349,13 +370,16 @@ function EverythingTracker(props) {
   }
 
   const handleBodyWeightEntry = e => {
+    // console.log("body weight entry: ", e.target.value);
     setBodyWeight({
       bodyWeight: e.target.value
     });
+    // console.log("bodyWeight: ", bodyWeight);
   }
 
   const handleSaveBodyWeight = e => {
     e.preventDefault();
+    // console.log("bodyWeight: ", document.getElementById("bodyWeight"));
     updateDay(dayID);
   }
 
@@ -456,7 +480,8 @@ function EverythingTracker(props) {
       </div>
       <div>
         <Plan
-          plans={props.plans}
+          // plans={props.plans}
+          plans={plans}
           selectedPlan={planID}
           handlePlanChange={handlePlanChange}
           handlePlanEntry={handlePlanEntry}
