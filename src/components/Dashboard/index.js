@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+
 import { Card, Row, Col, Button } from "react-bootstrap";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import domtoimage from "dom-to-image";
 import { saveAs } from 'file-saver';
+
 import API from "../Utils/API";
 import "./style.css";
 

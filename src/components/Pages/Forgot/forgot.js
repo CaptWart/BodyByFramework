@@ -12,7 +12,7 @@ export function Forgot() {
   headers.append('Content-Type', 'application/json');
   headers.append('Accept', 'application/json');
 
-    fetch('http://localhost:3001/sendPasswordReset', {
+    fetch('http://ec2-3-13-138-147.us-east-2.compute.amazonaws.com/sendPasswordReset', {
       method: 'POST',
       credentials: "include",
       headers: headers,

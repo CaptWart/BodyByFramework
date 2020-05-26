@@ -1,28 +1,75 @@
-.frontBox{
-    height: 600px;
-    width: 800px;
-    background-color: white;
-    position: absolute;
-    left: 50%;
-    margin-left: -400px;
-    z-index: 1;
-    top: 30px;
-    animation: grow 2s;
-    text-align: center;
-    opacity: 80%;
+* { padding: 0; margin: 0; }
+li{
+    float: left;
+    margin: 0 15px;
+    list-style-type: none;
 }
-.mainbox{
-    height: 660px;
-    width: 1400px;
-    position: relative;
+ul{
+    width: 50%;
     margin: auto;
 }
-
-.section{
-    background-image: url('images/background.jpg');
+#footer{
+margin-top: 20px;
+}
+/* .frontBox{
+    height: 600px;
+    width: 50%;
+    position: fixed;
+    top: auto;
+    position: relative;
+    animation: grow 2s;
+    margin: auto;
+    color: white;
+} */
+.homeApp{
+    height: 85%
 }
 
-.climb{
+.mainbox{
+    min-height: 100% !important;
+    height: 100%;
+    background-size: cover;
+    position: relative;
+    background-image: url('images/PurplePattern.jpg');
+}
+
+
+#copyright{
+    float: right;
+}
+
+a{
+    font-weight: 700;
+}
+#login{
+    padding-top: 50px;
+    margin-top: 80px;
+    margin-bottom: 80px;
+    height: 480px;
+    width: 350px;
+    border-style: solid;
+    border-color: black;
+    color: white;
+    text-align: center;
+}
+#info{
+    padding-top: 100px;
+    /* margin-top: 80px;
+    margin-bottom: 80px; */
+    height: 480px;
+    width: 350px;
+    color: white;
+    text-shadow: 1px 2px 4px black;
+    text-align: center;
+    margin: auto;
+}
+.section{
+    /* background-image: url('images/background.jpg'); */
+
+}
+
+
+/* .climb{
     animation: slideRight 800ms;
     position: relative;
     left: 80px;
@@ -64,4 +111,4 @@
         opacity: 80%;
     }
 
-}
+} */

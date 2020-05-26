@@ -150,7 +150,6 @@ function EverythingTracker(props) {
       console.log(err)
     );
   }
-
   const loadLastDay = planID => {
     API.getLastDay(planID)
     .then(res => {
@@ -191,6 +190,7 @@ function EverythingTracker(props) {
 
   // Delete Day.
   function deleteDay(dayID) {
+    console.log("lastDay: ", lastDay);
     API.deleteDay(dayID)
     .then(res => {
       loadDays(planID);
@@ -532,6 +532,7 @@ function EverythingTracker(props) {
           days={days}
           fitnesses={fitnesses}
           foods={foods}
+
         />
         <Card className="containerCard">
         {props.plans.length > 0 ?
