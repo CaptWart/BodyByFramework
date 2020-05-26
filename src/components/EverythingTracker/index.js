@@ -341,8 +341,14 @@ function EverythingTracker(props) {
       }
     }
     else {
-      const planID = e.target.value;
-      updatePlan(planID);
+      
+      if(document.getElementById("existingPlanName").value === "") {
+        document.getElementById("planEditAlert").style.display = "block";
+      } else {
+        document.getElementById("planEditAlert").style.display = "none";
+        const planID = e.target.value;
+        updatePlan(planID);
+      }
     }
   }
 
@@ -374,7 +380,14 @@ function EverythingTracker(props) {
 
   const handleSaveBodyWeight = e => {
     e.preventDefault();
-    updateDay(dayID);
+    const weight = document.getElementById("bodyWeight").value;
+    console.log("weight: ", weight);
+    if(isNaN(weight) || weight === "") {
+      document.getElementById("saveBodyWeightAlert").style.display = "block";        
+    } else {
+      document.getElementById("saveBodyWeightAlert").style.display = "none";
+      updateDay(dayID);
+    }
   }
 
   const handleDeleteDay = e => {
@@ -386,9 +399,12 @@ function EverythingTracker(props) {
   /* Fitness event handling */
   const handleSetFitness = e => {
     if(e.target.name === "new") {
+      console.log("here! about to add new fitness!");
       setFitnessState(initialFitnessState);
     } 
     else {
+      console.log("eventKey: ", e.target.eventKey);
+      console.log("fitnessState: ", fitnessState);
       const fitnessID = e.target.name;
       loadFitness(fitnessID);
     }
@@ -405,10 +421,30 @@ function EverythingTracker(props) {
     if(e.target.name === "createBtn") {
       const type = e.target.value;
       const fitnessData = {...fitnessState, type:type, userID: userID, planID: planID, dayID: dayID};
-      clearFitness(); // Reset the fitnessState with the initial values.
-      createFitness(fitnessData);
-      document.getElementById('newStrength').reset();
-      document.getElementById('newActivity').reset();
+
+      if(type === "strength") {
+        if(fitnessData.workout === "" || isNaN(fitnessData.weight) || isNaN(fitnessData.sets) || isNaN(fitnessData.reps)) {
+          console.log("bad data!");
+          document.getElementById("strengthSaveAlert").style.display = "block"; 
+        } else {
+          console.log("good data!");
+          document.getElementById("strengthSaveAlert").style.display = "none";
+          clearFitness(); // Reset the fitnessState with the initial values.
+          createFitness(fitnessData);
+          document.getElementById('newStrength').reset();
+        }
+      } else {
+        if(fitnessData.workout === "" || isNaN(fitnessData.distance) || isNaN(fitnessData.time)) {
+          console.log("bad data!");
+          document.getElementById("activitySaveAlert").style.display = "block"; 
+        } else {
+          console.log("good data!");
+          document.getElementById("activitySaveAlert").style.display = "none";
+          clearFitness(); // Reset the fitnessState with the initial values.
+          createFitness(fitnessData);
+          document.getElementById('newActivity').reset();
+        }
+      }
     }
     else {
       const fitnessID = e.target.value;
@@ -447,9 +483,17 @@ function EverythingTracker(props) {
     e.preventDefault();
     if(e.target.name === "createBtn") {
       const foodData = {...foodState, userID: userID, planID: planID, dayID: dayID};
-      clearFood();  // Reset the foodState with the initial values.
-      createFood(foodData);
-      document.getElementById('newFood').reset();
+      console.log("foodData: ", foodData);
+      if(foodData.item === "" || isNaN(foodData.calories) || isNaN(foodData.price)) {
+        console.log("bad data!");
+        document.getElementById("foodSaveAlert").style.display = "block"; 
+      } else {
+        console.log("good data!");
+        document.getElementById("foodSaveAlert").style.display = "none";
+        clearFood();  // Reset the foodState with the initial values.
+        createFood(foodData);
+        document.getElementById('newFood').reset();
+      }
     }
     else {
       const foodID = e.target.value;

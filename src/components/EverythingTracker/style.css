@@ -53,3 +53,10 @@ button {
 .alert-heading {
   font-size: 1em !important;
 }
+
+.alert {
+  color: red;
+  display: none;
+  margin: 0 !important;
+  padding: 2 !important;
+}

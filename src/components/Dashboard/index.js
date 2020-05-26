@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Button, Alert } from "react-bootstrap";
+import { Card, Row, Col, Button } from "react-bootstrap";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
@@ -19,7 +19,7 @@ function Dashboard(props) {
   const [totalCalories, setTotalCalories] = useState(0);
   const [totalMoneySpent, setTotalMoneySpent] = useState(0);
   const [selectedDataID, setSelectedDataID] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState("none");
 
   const loadAllFitnesses = planID => {
     API.getAllFitnesses(planID)
@@ -325,12 +325,13 @@ function Dashboard(props) {
       domtoimage.toBlob(dataImg)
       .then(function (blob) {
           saveAs(blob, 'BBF-data-image.jpeg');
+          setShowAlert("none");
       })
       .catch(err => {
         console.log(err);
       });
     } else {
-      setShowAlert(true);
+      setShowAlert("block");
     }
   }
 
@@ -434,13 +435,8 @@ function Dashboard(props) {
         </Card>
       </Col>
       </Row>
+      <div id="saveImgAlert" className="alert" style={{display: showAlert}}>You have not selected a data image to save.</div>
       <Button variant="primary" className="m-auto" onClick={saveImage}>Save Selected Data Image</Button>
-      <Alert show={showAlert} variant="danger">
-        <Alert.Heading>You have not selected a data image to save.</Alert.Heading>
-        <div className="d-flex justify-content-end">
-          <Button onClick={() => setShowAlert(false)} variant="primary" size="sm">Close</Button>
-        </div>
-      </Alert>
     </Card>
   );
 }

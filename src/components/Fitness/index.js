@@ -19,7 +19,7 @@ function Fitness(props) {
 
   return (
     <div>
-      {props.fitnesses.map(fitness => 
+      {props.fitnesses.map((fitness, index) => 
         <Accordion key={fitness._id}>
           <Card>
             <Card.Header>
@@ -27,13 +27,15 @@ function Fitness(props) {
                 name={fitness._id}
                 as={Button} 
                 variant="link" 
-                eventKey={fitness._id}
+                // eventKey={fitness._id}
+                eventKey={index}
                 onClick={props.handleSetFitness}
               >
                 {fitness.workout}
               </Accordion.Toggle>
             </Card.Header>
-            <Accordion.Collapse eventKey={fitness._id}>
+            {/* <Accordion.Collapse eventKey={fitness._id}> */}
+            <Accordion.Collapse eventKey={index}>
               <Card.Body>
                 {fitness.type==="strength" ?
                   <Form className="strengthForm">
@@ -188,6 +190,9 @@ function Fitness(props) {
                     onChange={props.handleFitnessEntry}
                   />
                 </Form.Group>
+                <div id="strengthSaveAlert" className="alert">
+                  Please enter valid data: "Workout" name is required. All other data must be numbers.
+                </div>
                 <Button
                   name="createBtn" 
                   variant="primary"
@@ -224,6 +229,9 @@ function Fitness(props) {
                     onChange={props.handleFitnessEntry}
                   />
                 </Form.Group>
+                <div id="activitySaveAlert" className="alert">
+                Please enter valid data: "Activity" name is required. All other data must be numbers.
+                </div>
                 <Button
                   name="createBtn" 
                   variant="primary"

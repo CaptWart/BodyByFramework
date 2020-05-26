@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Alert, Card, Form } from "react-bootstrap";
 
 function Day(props) {
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState("none");
 
   return (
     <div>
@@ -18,25 +18,23 @@ function Day(props) {
 
       {props.days.length > 0 ?
         <span>
-          {!showAlert && 
             <Button
               name="deleteBtn"
               variant="danger" 
               type="submit"
-              onClick={() => setShowAlert(true)}
+              onClick={() => setShowAlert("block")}
             >
               Remove Day
             </Button>
-          }
-          <Alert show={showAlert} variant="danger">
+          <Alert style={{display: showAlert}} variant="danger">
           <Alert.Heading>Are you sure?</Alert.Heading>
           <p>
             You are about to delete all the data associated with 
-            <span class="dayToDelete"> Day {props.days[props.days.length -1].day}.</span>
+            <span className="dayToDelete"> Day {props.days[props.days.length -1].day}.</span>
           </p>
           <div className="d-flex justify-content-end">
-            <Button onClick={() => setShowAlert(false)} variant="primary" size="sm">Cancel</Button>
-            <Button onClick={() => {props.handleDeleteDay(); setShowAlert(false);}} variant="danger" size="sm">Delete</Button>
+            <Button onClick={() => setShowAlert("none")} variant="primary" size="sm">Cancel</Button>
+            <Button onClick={() => {props.handleDeleteDay(); setShowAlert("none");}} variant="danger" size="sm">Delete</Button>
           </div>
           </Alert>
         </span>
@@ -60,10 +58,10 @@ function Day(props) {
                     name="bodyWeight"
                     type="text"
                     defaultValue={props.bodyWeight}
-                    // value={props.bodyWeight}
                     onChange={props.handleBodyWeightEntry}
                   />
               </Form.Group>
+              <div id="saveBodyWeightAlert" className="alert" style={{display: showAlert}}>Body Weight needs to be a number.</div>
               <Button
                 name="createBtn"
                 variant="primary" 
