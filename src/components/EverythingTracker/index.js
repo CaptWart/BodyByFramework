@@ -31,7 +31,7 @@ function EverythingTracker(props) {
   const [planState, setPlanState] = useState({});
   const [days, setDays] = useState([]);
   const [dayID, setDayID] = useState("");
-  const [bodyWeight, setBodyWeight] = useState(0);
+  const [bodyWeight, setBodyWeight] = useState();
   const [lastDay, setLastDay] = useState({});
   const [fitnesses, setFitnesses] = useState([]);
   const [foods, setFoods] = useState([]);
@@ -327,14 +327,11 @@ function EverythingTracker(props) {
   }
 
   const handlePlanChange = e => {
-    console.log("e.target: ", e.target);
     setPlanID(e.target.value);
   }
 
   const handleSavePlan = e => {
     e.preventDefault();
-    console.log("newPlanName element: ", document.getElementById("newPlanName").value);
-    
     if(e.target.name === "createBtn") {
       if(document.getElementById("newPlanName").value === "") {
         document.getElementById("planAlert").style.display = "block";        
@@ -370,16 +367,13 @@ function EverythingTracker(props) {
   }
 
   const handleBodyWeightEntry = e => {
-    // console.log("body weight entry: ", e.target.value);
     setBodyWeight({
       bodyWeight: e.target.value
     });
-    // console.log("bodyWeight: ", bodyWeight);
   }
 
   const handleSaveBodyWeight = e => {
     e.preventDefault();
-    // console.log("bodyWeight: ", document.getElementById("bodyWeight"));
     updateDay(dayID);
   }
 

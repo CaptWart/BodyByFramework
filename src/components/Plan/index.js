@@ -49,7 +49,7 @@ function Plan(props) {
                   onChange={props.handlePlanEntry}
                 />
             </Form.Group>
-            <div id="planAlert" className="alert" show="false"></div>
+            <div id="planAlert" className="alert" show="false">Plan name needs to be entered.</div>
             <Button
               name="createBtn"
               variant="primary" 

@@ -1,27 +1,28 @@
 import axios from "axios";
 
-const localHost = "http://localhost:3001";
+const testServer = "http://ec2-3-13-138-147.us-east-2.compute.amazonaws.com";
+// const localHost = "http://localhost:3001";
 
 export default {
   /* User */
   // Gets all users
   getAllUsers: function() {
-    return axios.get(localHost + "/api/users");
+    return axios.get(testServer + "/api/users");
   },
   // Gets the user with the given id
   getUser: function(id) {
-    return axios.get(localHost + "/api/users/" + id);
+    return axios.get(testServer + "/api/users/" + id);
   },
   // Deletes the user with the given id
   deleteUser: function(id) {
-    return axios.delete(localHost + "/api/users/" + id);
+    return axios.delete(testServer + "/api/users/" + id);
   },
   /* Plan */
   // Get all plans with the given userID
   getAllPlans: function(userID) {
     return axios({
       method: 'get',
-      url: localHost + "/api/plans",
+      url: testServer + "/api/plans",
       // withCredentials: true,
       params: {
         userID: userID
@@ -30,26 +31,26 @@ export default {
   },
   // Get the plan with the given id
   getPlan: function(id) {
-    return axios.get(localHost + "/api/plans/" + id );
+    return axios.get(testServer + "/api/plans/" + id );
   },
   // Create the plan with the given data
   createPlan: function(planData) {
-    return axios.post(localHost + "/api/plans", planData);
+    return axios.post(testServer + "/api/plans", planData);
   },
   // Update the plan with the given id and data
   updatePlan: function(id, planData) {
-    return axios.put(localHost + "/api/plans/" + id, planData);
+    return axios.put(testServer + "/api/plans/" + id, planData);
   },
   // Delete the plan witht he given id
   deletePlan: function(id) {
-    return axios.delete(localHost + "/api/plans/" + id);
+    return axios.delete(testServer + "/api/plans/" + id);
   },
   /* Day */
   // Get all days with the given planID
   getAllDays: function(planID) {
     return axios({
       method: 'get',
-      url: localHost + "/api/days",
+      url: testServer + "/api/days",
       params: {
         planID: planID
       }
@@ -59,7 +60,7 @@ export default {
   getDay: function(id) {
     return axios({
       method: 'get',
-      url: localHost + "/api/days/id",
+      url: testServer + "/api/days/id",
       params: {
         _id: id
       }
@@ -69,7 +70,7 @@ export default {
   getLastDay: function(planID) {
     return axios({
       method: 'get',
-      url: localHost + "/api/days/last",
+      url: testServer + "/api/days/last",
       params: {
         planID: planID
       }
@@ -77,22 +78,22 @@ export default {
   },
   // Create the day with the given data
   createDay: function(dayData) {
-    return axios.post(localHost + "/api/days", dayData);
+    return axios.post(testServer + "/api/days", dayData);
   },
   // Update the day with the given id and data
   updateDay: function(id, dayData) {
-    return axios.put(localHost + "/api/days/" + id, dayData);
+    return axios.put(testServer + "/api/days/" + id, dayData);
   },
   // Delete the day witht the given id
   deleteDay: function(id) {
-    return axios.delete(localHost + "/api/days/" + id);
+    return axios.delete(testServer + "/api/days/" + id);
   },
   /* Fitness */
   // Get all fitnesses with the given planID
   getAllFitnesses: function(planID) {
     return axios({
       method: 'get',
-      url: localHost + "/api/fitnesses",
+      url: testServer + "/api/fitnesses",
       params: {
         planID: planID
       }
@@ -102,7 +103,7 @@ export default {
   getAllFitnessesByDay: function(dayID) {
     return axios({
       method: 'get',
-      url: localHost + "/api/fitnesses/day",
+      url: testServer + "/api/fitnesses/day",
       params: {
         dayID: dayID
       }
@@ -110,26 +111,26 @@ export default {
   },
   // Get the fitness with the given id
   getFitness: function(id) {
-    return axios.get(localHost + "/api/fitnesses/" + id );
+    return axios.get(testServer + "/api/fitnesses/" + id );
   },
   // Create the fitness with the given data
   createFitness: function(fitnessData) {
-    return axios.post(localHost + "/api/fitnesses", fitnessData);
+    return axios.post(testServer + "/api/fitnesses", fitnessData);
   },
   // Update the fitness with the given id and data
   updateFitness: function(id, fitnessData) {
-    return axios.put(localHost + "/api/fitnesses/" + id, fitnessData);
+    return axios.put(testServer + "/api/fitnesses/" + id, fitnessData);
   },
   // Delete the fitness witht the given id
   deleteFitness: function(id) {
-    return axios.delete(localHost + "/api/fitnesses/" + id);
+    return axios.delete(testServer + "/api/fitnesses/" + id);
   },
   /* Food */
   // Get all foods with the given dayID
   getAllFoods: function(planID) {
     return axios({
       method: 'get',
-      url: localHost + "/api/foods",
+      url: testServer + "/api/foods",
       params: {
         planID: planID
       }
@@ -139,7 +140,7 @@ export default {
   getAllFoodsByDay: function(dayID) {
     return axios({
       method: 'get',
-      url: localHost + "/api/foods/day",
+      url: testServer + "/api/foods/day",
       params: {
         dayID: dayID
       }
@@ -147,18 +148,18 @@ export default {
   },
   // Get the food with the given id
   getFood: function(id) {
-    return axios.get(localHost + "/api/foods/" + id );
+    return axios.get(testServer + "/api/foods/" + id );
   },
   // Create the food with the given data
   createFood: function(foodData) {
-    return axios.post(localHost + "/api/foods", foodData);
+    return axios.post(testServer + "/api/foods", foodData);
   },
   // Update the food with the given id and data
   updateFood: function(id, foodData) {
-    return axios.put(localHost + "/api/foods/" + id, foodData);
+    return axios.put(testServer + "/api/foods/" + id, foodData);
   },
   // Delete the food witht the given id
   deleteFood: function(id) {
-    return axios.delete(localHost + "/api/foods/" + id);
+    return axios.delete(testServer + "/api/foods/" + id);
   },
 };
