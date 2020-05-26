@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Form, Button, Alert } from "react-bootstrap";
+import { Card, Form, Button } from "react-bootstrap";
 import API from "../Utils/API";
 import "./style.css";
 
@@ -49,7 +49,7 @@ function Plan(props) {
                   onChange={props.handlePlanEntry}
                 />
             </Form.Group>
-            <div id="planAlert" className="alert" show="false">Plan name needs to be entered.</div>
+            <div id="planAlert" className="alert">Plan name needs to be entered.</div>
             <Button
               name="createBtn"
               variant="primary" 
@@ -89,13 +89,14 @@ function Plan(props) {
             <Form.Group>
               <Form.Label>Plan Name</Form.Label>
                 <Form.Control
-                  id="newPlanName"
+                  id="existingPlanName"
                   name="name"
                   type="text"
                   defaultValue={selectedPlan.name}
                   onChange={props.handlePlanEntry}
                 />
             </Form.Group>
+            <div id="planEditAlert" className="alert">Plan name needs to be entered.</div>
             <Button
               name="updateBtn"
               variant="primary"

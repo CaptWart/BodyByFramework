@@ -118,6 +118,9 @@ function Food(props) {
                     onChange={props.handleFoodEntry} 
                   />
                 </Form.Group>
+                <div id="foodSaveAlert" className="alert">
+                  Please enter valid data: "Item" name is required. All other data must be numbers.
+                </div>
                 <Button
                   name="createBtn"
                   variant="primary"
