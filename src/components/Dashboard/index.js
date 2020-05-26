@@ -132,7 +132,6 @@ function Dashboard(props) {
 
   const favoriteWorkouts = createFavoriteWorkouts(numWorkoutData);
 
-
   const createCaloriesData = data => {
     if(data.length) {
       const calorieArr = data.map(food => {
@@ -262,11 +261,6 @@ function Dashboard(props) {
     series.ticks.template.locationY = 0.5;
     
     series.labelsContainer.width = 200;
-
-    // let label = chart.createChild(am4core.Label);
-    // label.text = "What You Are Made Out Of";
-    // label.fontSize = "1em";
-    // label.align = "center";  
   }
 
   const createXYChart = data => {
@@ -347,12 +341,6 @@ function Dashboard(props) {
       {/* Total Plan Data Summary */}
       <Col sm={12} lg={6}>
         <Card className="p-2">
-          {/* <Row>
-            <Col xsm={10}><h3>Total Plan Data Summary</h3></Col>
-            <Col xsm={2} className="text-right">
-              <input data-id="dataSummary" type="radio" onClick={handleChartSelect}></input>
-            </Col>
-          </Row> */}
           <Col xsm={12} className="text-right">
               <input data-id="totalDataSummary" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
           </Col><br/>
@@ -453,7 +441,6 @@ function Dashboard(props) {
           <Button onClick={() => setShowAlert(false)} variant="primary" size="sm">Close</Button>
         </div>
       </Alert>
-      {/* <Card><div id="imageToSave">Selected Data Image goes here.</div></Card> */}
     </Card>
   );
 }
