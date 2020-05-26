@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Form, Button } from "react-bootstrap";
+import { Card, Form, Button, Alert } from "react-bootstrap";
 import API from "../Utils/API";
 import "./style.css";
 
@@ -49,9 +49,11 @@ function Plan(props) {
                   onChange={props.handlePlanEntry}
                 />
             </Form.Group>
+            <div id="planAlert" className="alert" show="false"></div>
             <Button
               name="createBtn"
               variant="primary" 
+              size="sm"
               type="submit" 
               onClick={props.handleSavePlan}
             >
@@ -71,7 +73,8 @@ function Plan(props) {
           </select>
           <Button
             name="createBtn"
-            variant="primary" 
+            variant="primary"
+            size="sm"
             type="submit"
             onClick={onClickEditPlan}
           >
@@ -95,7 +98,8 @@ function Plan(props) {
             </Form.Group>
             <Button
               name="updateBtn"
-              variant="primary" 
+              variant="primary"
+              size="sm" 
               type="submit"
               value={selectedPlan._id}
               onClick={props.handleSavePlan}
@@ -104,7 +108,8 @@ function Plan(props) {
             </Button>
             <Button
               name="deleteBtn"
-              variant="danger" 
+              variant="danger"
+              size="sm" 
               type="submit"
               className="ml-2"
               value={selectedPlan._id}

@@ -112,6 +112,7 @@ function Fitness(props) {
                 <Button
                   name="updateBtn"
                   variant="primary"
+                  size="sm"
                   className="mx-2" 
                   type="submit" 
                   value={fitness._id} 
@@ -122,6 +123,7 @@ function Fitness(props) {
                 <Button
                   name="deleteBtn"
                   variant="danger"
+                  size="sm"
                   className="mx-2"
                   type="submit" 
                   value={fitness._id} 
@@ -150,8 +152,8 @@ function Fitness(props) {
           <Accordion.Collapse eventKey="new">
             <Card.Body>
               <ButtonGroup toggle>
-                <ToggleButton type="radio" value={"strength"} onChange={handleTypeChange}>Strength</ToggleButton>
-                <ToggleButton type="radio" value={"activity"} onChange={handleTypeChange}>Activity</ToggleButton>
+                <ToggleButton type="radio" value={"strength"} size="sm" onChange={handleTypeChange}>Strength</ToggleButton>
+                <ToggleButton type="radio" value={"activity"}  size="sm" onChange={handleTypeChange}>Activity</ToggleButton>
               </ButtonGroup>
               <Form id="newStrength" className="newFitnessForm" style={{ display: strengthForm }}>
                 <Form.Group>
@@ -188,7 +190,8 @@ function Fitness(props) {
                 </Form.Group>
                 <Button
                   name="createBtn" 
-                  variant="primary" 
+                  variant="primary"
+                  size="sm"
                   type="submit"
                   value={type}
                   onClick={props.handleSaveFitness}
@@ -223,7 +226,8 @@ function Fitness(props) {
                 </Form.Group>
                 <Button
                   name="createBtn" 
-                  variant="primary" 
+                  variant="primary"
+                  size="sm"
                   type="submit"
                   value={type}
                   onClick={props.handleSaveFitness}
