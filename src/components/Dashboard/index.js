@@ -2,13 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Button } from "react-bootstrap";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
-import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import domtoimage from "dom-to-image";
 import { saveAs } from 'file-saver';
 import API from "../Utils/API";
 import "./style.css";
-
-am4core.useTheme(am4themes_animated);
 
 function Dashboard(props) {
   const [allFitnesses, setAllFitnesses] = useState([]);
@@ -259,6 +256,8 @@ function Dashboard(props) {
     series.maskSprite.path = iconPath;
     series.ticks.template.locationX = 1;
     series.ticks.template.locationY = 0.5;
+
+    chart.defaultState.transitionDuration = 0;
     
     series.labelsContainer.width = 200;
   }
@@ -283,6 +282,8 @@ function Dashboard(props) {
     lineSeries.name = "Body Weight";
     lineSeries.strokeWidth = 2;
 
+    chart.defaultState.transitionDuration = 0;
+
     let label = chart.createChild(am4core.Label);
     label.text = "Body Weight by Day";
     label.fontSize = "1em";
@@ -296,10 +297,12 @@ function Dashboard(props) {
     chart.data = data;
 
     chart.innerRadius = am4core.percent(40);
-    chart.depth = 120;
+    chart.depth = 60;
     chart.width = 150;
     chart.height = 250;
     chart.align = "center";
+
+    chart.defaultState.transitionDuration = 0;
 
     let series = chart.series.push(new am4charts.PieSeries3D());
     series.dataFields.value = "nums";
