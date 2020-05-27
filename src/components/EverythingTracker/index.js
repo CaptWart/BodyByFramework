@@ -327,6 +327,7 @@ function EverythingTracker(props) {
   }
 
   const handlePlanChange = e => {
+    document.getElementById("existingPlanNameForm").reset();
     setPlanID(e.target.value);
   }
 
@@ -338,10 +339,10 @@ function EverythingTracker(props) {
       } else {
         document.getElementById("planAlert").style.display = "none";
         createPlan();
+        document.getElementById("newPlanNameForm").reset();
       }
     }
-    else {
-      
+    else {    
       if(document.getElementById("existingPlanName").value === "") {
         document.getElementById("planEditAlert").style.display = "block";
       } else {
@@ -360,6 +361,7 @@ function EverythingTracker(props) {
   /*  Day event handling  */
   const handleDayChange = e => {
     const id = e.target.value;
+    document.getElementById("bodyWeightForm").reset();
     setDayID(id);
     loadDay(id);
   }

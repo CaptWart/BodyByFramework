@@ -39,7 +39,7 @@ function Plan(props) {
       </Button>
       {showCreatePlan &&
         <Card>
-          <Form>
+          <Form id="newPlanNameForm">
             <Form.Group>
               <Form.Label>New Plan Name</Form.Label>
                 <Form.Control
@@ -85,7 +85,7 @@ function Plan(props) {
 
       {showEditPlan &&
         <Card>
-          <Form className="p-2">
+          <Form id="existingPlanNameForm" className="p-2">
             <Form.Group>
               <Form.Label>Plan Name</Form.Label>
                 <Form.Control
