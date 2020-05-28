@@ -35,7 +35,7 @@ export function Current() {
           .then(res => {
             setPlans(res.data)
           })
-          .catch(err => console.log(err));
+          .catch(err => {});
     };
 
     return (
