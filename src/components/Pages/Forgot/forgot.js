@@ -4,7 +4,6 @@ export function Forgot() {
   const [email, setEmail] = useState("");
 
   const handleSubmit = (evt) => {
-      console.log(email)
     evt.preventDefault();
 
   var headers = new Headers();
@@ -19,7 +18,7 @@ export function Forgot() {
     })
       .then(response => {
         if (response.status === 401 || response.status === 422) {
-          console.log("bad")
+          
         }
         else {
           window.location.href = "/login";

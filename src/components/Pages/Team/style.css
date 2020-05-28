@@ -15,9 +15,7 @@ margin-top: 20px;
     width: 50%;
     position: fixed;
     top: auto;
-    /* background-color: white; */
     position: relative;
-    /* top: 30px; */
     animation: grow 2s;
     margin: auto;
     color: white;
@@ -25,13 +23,7 @@ margin-top: 20px;
 html {
     height: 100%;
 }
-/* .mainbox{
-    height: 500px;
-    background-size: cover;
-    position: relative;
-    background-image: url('images/PurplePattern.jpg');
 
-} */
 #meetTheTeam{
     width: 330px;
 }
@@ -56,8 +48,6 @@ a{
 #teamInfo{
     padding-top: 30px;
     padding-bottom: 30px;
-    /* margin-top: 80px;
-    margin-bottom: 80px; */
     color: white;
     text-shadow: 1px 2px 4px black;
     text-align: center;
@@ -68,57 +58,17 @@ a{
 .teambox{
     background-size: cover;
     position: relative;
-    background-image: url('images/TeamBackground.jpg');
-}
-
-.section{
-    /* background-image: url('images/background.jpg'); */
-
+    background-image: url('images/TeamBackground.png');
 }
 .portrait{
-    float: right;
-}
+    float: fixed;
+    height: 150px;
+    width: 150px;
 
-/* .climb{
-    animation: slideRight 800ms;
-    position: relative;
-    left: 80px;
 }
-@keyframes slideRight{
-    from {
-        left: -20px;
-        opacity: 0%;
-    }
-    to {
-        left: 80px;
-    }
-  }
-
-.run{
-    animation: slideleft 800ms;
-    position: relative;
-    left: -80px;
+.frames{
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    margin: -25px 0px 0px -100px;
 }
-@keyframes slideleft{
-    from {
-        left: 20px;
-        opacity: 0%;
-    }
-    to {
-        left: -80px;
-    }
-  }
-@keyframes grow{
-    0%{
-        transform: scale(.8);
-        opacity: 0;
-    }
-    40%{        
-        opacity: 0;
-    }
-    100%{
-        transform: scale(1);
-        opacity: 80%;
-    }
-
-} */

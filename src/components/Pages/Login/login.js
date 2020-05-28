@@ -24,7 +24,6 @@ export function Login(props) {
     })
       .then(response => {
         if (response.status === 401 || response.status === 422) {
-          console.log("bad")
           setBadLogin("block")
         }
         else {

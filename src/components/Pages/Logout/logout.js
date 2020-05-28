@@ -12,7 +12,6 @@ export function Logout(){
         credentials: 'include'
       }).then (response => { 
         if(response.status === 500){
-            console.log("bad")
             window.location.href = "/login";
         }
         else{

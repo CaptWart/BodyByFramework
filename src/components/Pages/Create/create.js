@@ -48,9 +48,7 @@ export function Create(props) {
         else {
             setPasswordCheck("none")
         }
-        if ((!email || !password || !nickname || !ageCheck || !policyCheck) && (!emailFormat.test(email) || !passwordFormat.test(password))) {
-            console.log("bad")
-        }
+
         if (!email || !password || !nickname || !ageCheck || !policyCheck || !emailFormat.test(email) || !passwordFormat.test(password)) {
             setBadForm("block")
         }
@@ -66,14 +64,13 @@ export function Create(props) {
             })
                 .then(response => {
                     if (response.status === 500) {
-                        console.log("bad")
                         //window.location.href = "/login";
                     }
                     else if (response.status === 400){
                         setEmailUse("block")
                     }
                     else {
-                        window.location.href = "/login";
+                        window.location.href = "/verify";
                     }
                 })
         }

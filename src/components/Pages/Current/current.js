@@ -10,7 +10,6 @@ export function Current() {
     React.useEffect(function effectFunction() {
         async function fetchUser() {
             const response = await fetch('http://ec2-3-13-138-147.us-east-2.compute.amazonaws.com/current', { method: "GET", credentials: 'include' })
-            console.log(response.status)
             if(!response || response.status === 500 || response.status === 401){
                 window.location.href = "/login";
             }
@@ -20,7 +19,6 @@ export function Current() {
             else{
                 const json = await response.json();
                 setUser(json)
-                console.log("user json: ", json);
             }
         }
         fetchUser()
@@ -42,7 +40,6 @@ export function Current() {
 
     return (
         <div>
-            logged in as {user.email} and {user._id}
             <Link to="/logout">
                 <button type="button">
                     Logout

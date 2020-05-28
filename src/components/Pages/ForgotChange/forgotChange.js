@@ -5,9 +5,7 @@ export function ForgotChange() {
   const passwordFormat = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
   const [passwordCheck, setPasswordCheck] = useState("none")
 
-  console.log(window.location.search)
   const handleSubmit = (evt) => {
-      console.log(password)
     evt.preventDefault();
 
 
@@ -28,11 +26,9 @@ export function ForgotChange() {
           })
             .then(response => {
               if (response.status === 401 || response.status === 422) {
-                console.log("bad")
               }
               else {
                 window.location.href = "/login";
-                console.log("changed")
               }
             })
         }

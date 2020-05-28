@@ -9,14 +9,12 @@ export function ChangePassword() {
     async function fetchUser() {
         const response = await fetch('http://localhost:3001/current', { method: "GET", credentials: 'include' })
         //const json = await response.json();
-        console.log(!response)
         if(!response || response.status === 500 || response.status === 401){
             window.location.href = "/login";
         }
         else{
                   const json = await response.json();
                   setUser(json)
-                  console.log("user json: ", json);
         }
 
     }
@@ -27,7 +25,6 @@ export function ChangePassword() {
 
   
   const handleSubmit = (evt) => {
-      console.log(password)
     evt.preventDefault();
 
   var headers = new Headers();
@@ -42,7 +39,6 @@ export function ChangePassword() {
     })
       .then(response => {
         if (response.status === 401 || response.status === 422) {
-          console.log("bad")
         }
         else {
           //window.location.href = "/login";
