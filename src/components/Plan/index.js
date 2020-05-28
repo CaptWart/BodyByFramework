@@ -22,9 +22,7 @@ function Plan(props) {
     .then(res => {
       setSelectedPlan(res.data);
     })
-    .catch(err =>
-      console.log(err)
-    );
+    .catch(err =>{});
   }
   
   return (
