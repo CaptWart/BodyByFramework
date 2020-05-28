@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-
-import { Card, Row, Col, Button } from "react-bootstrap";
+import { Card, Row, Col, Button, Accordion } from "react-bootstrap";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
+import am4themes_material from "@amcharts/amcharts4/themes/material";
+import * as am4plugins_sliceGrouper from "@amcharts/amcharts4/plugins/sliceGrouper"; 
 import domtoimage from "dom-to-image";
 import { saveAs } from 'file-saver';
-
 import API from "../Utils/API";
 import "./style.css";
+
+am4core.useTheme(am4themes_material);
 
 function Dashboard(props) {
   const [allFitnesses, setAllFitnesses] = useState([]);
@@ -25,9 +27,7 @@ function Dashboard(props) {
     .then(res => {
       setAllFitnesses(res.data);
     })
-    .catch(err => {
-      console.log(err);
-    });
+    .catch(err => {});
   }
 
   const loadAllFoods = planID => {
@@ -35,9 +35,7 @@ function Dashboard(props) {
     .then(res => {
       setAllFoods(res.data);
     })
-    .catch(err => {
-      console.log(err);
-    });
+    .catch(err => {});
   }
 
   // Calculate total weight moved
@@ -86,10 +84,12 @@ function Dashboard(props) {
   }
 
   const createXYChartData = data => {
-    const daysData = data.map(day => {
-      return {day:day.day, bodyWeight: day.bodyWeight};
-    });
-    return daysData;
+    if(data.length) {
+      const daysData = data.map(day => {
+        return {day:day.day, bodyWeight: day.bodyWeight};
+      });
+      return daysData;
+    }
   }
 
   const xyChartData = createXYChartData(props.days);
@@ -197,8 +197,16 @@ function Dashboard(props) {
   const favoriteFoods = createFavoriteFoods(numFoodData);
 
   const createWeeklyAverageData = (weeks, total) => {
-    if(total) return Math.floor(total / weeks);
-    else return 0;
+    let average = 0;
+    if(total) {
+      if(weeks > 1) {
+        average = Math.floor(total / weeks);
+      }
+      else {
+        average = total;
+      }
+    }
+    return average;
   }
 
   const numWeeks = props.days.length / 7;
@@ -238,7 +246,7 @@ function Dashboard(props) {
   }, [xyChartData]);
 
   useEffect(() => {
-    createPieChart(numWorkoutData);
+    createFunnelChart(numWorkoutData);
     return () => {
       am4core.disposeAllCharts();
     }
@@ -254,7 +262,12 @@ function Dashboard(props) {
     series.dataFields.value = "value";
     series.dataFields.category = "name";
     series.alignLabels = false;
-    
+
+    let grouper = series.plugins.push(new am4plugins_sliceGrouper.SliceGrouper());
+    grouper.threshold = 5;
+    grouper.groupName = "Other";
+    grouper.clickBehavior = "break";
+
     series.maskSprite.path = iconPath;
     series.ticks.template.locationX = 1;
     series.ticks.template.locationY = 0.5;
@@ -292,33 +305,33 @@ function Dashboard(props) {
     label.align = "center";   
   }
 
-  const createPieChart = data => {
-    let chart = am4core.create("pieChart", am4charts.PieChart3D);
-    chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+  const createFunnelChart = data => {
+    let chart = am4core.create("funnelChart", am4charts.SlicedChart);
+    chart.hiddenState.properties.opacity = 0;
+    chart.responsive.enabled = true;
 
     chart.data = data;
 
-    chart.innerRadius = am4core.percent(40);
-    chart.depth = 60;
-    chart.width = 150;
-    chart.height = 250;
-    chart.align = "center";
-
     chart.defaultState.transitionDuration = 0;
-
-    let series = chart.series.push(new am4charts.PieSeries3D());
+    
+    let series = chart.series.push(new am4charts.FunnelSeries());
+    series.colors.step = 2;
     series.dataFields.value = "nums";
-    series.dataFields.depthValue = "nums";
     series.dataFields.category = "workout";
-    series.slices.template.cornerRadius = 5;
-    series.colors.step = 3;
-    series.alignLabels = false;
+    series.alignLabels = true;
+
+    let grouper = series.plugins.push(new am4plugins_sliceGrouper.SliceGrouper());
+    grouper.threshold = 10;
+    grouper.groupName = "Other";
+    grouper.clickBehavior = "break";
+    
+    series.labelsContainer.paddingLeft = 15;
+    series.labelsContainer.width = 200;
   }
 
   // Chart checkbox event handling
   const handleChartSelect = e => {
     const dataID = e.target.getAttribute("data-id");
-    console.log("dataID: ", dataID);
     setSelectedDataID(dataID);
   }
 
@@ -332,117 +345,123 @@ function Dashboard(props) {
           saveAs(blob, 'BBF-data-image.jpeg');
           setShowAlert("none");
       })
-      .catch(err => {
-        console.log(err);
-      });
+      .catch(err => {});
     } else {
       setShowAlert("block");
     }
   }
 
   return (
-    <Card className="containerCard">
-      <h2>Dashboard</h2>
-      <Row>
-      {/* Total Plan Data Summary */}
-      <Col sm={12} lg={6}>
-        <Card className="p-2">
-          <Col xsm={12} className="text-right">
-              <input data-id="totalDataSummary" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
-          </Col><br/>
-          <div id="totalDataSummary" className="dispData" >
-            <h3>Total Plan Data Summary</h3>
-            <h4>Total Calories: <span className="calcResult">{totalCalories} cal</span></h4>
-            <h4>Total Money Spent: <span className="calcResult">$ {totalMoneySpent}</span></h4>
-            <h4>Total Weight Moved: <span className="calcResult">{totalWeightMoved} lbs</span></h4>
-            <h4>Total Distance: <span className="calcResult">{totalDistance} m</span></h4>
-            <h4>Total Activity Time: <span className="calcResult">{totalTime} mins</span></h4>
-          </div>
-        </Card>
-      </Col>
-      {/* Weekly Average */}
-      <Col sm={12} lg={6}>
-        <Card className="p-2">
-          <Col xsm={12} className="text-right">
-              <input data-id="weeklyAverage" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
-          </Col><br/>
-          <div id="weeklyAverage" className="dispData" >
-            <h3>Weekly Average</h3>
-            <h4>Calories: <span className="calcResult">{averageCalories} cal</span></h4>
-            <h4>Money Spent: <span className="calcResult">$ {averageMoneySpent}</span></h4>
-            <h4>Weight Moved: <span className="calcResult">{averageWeightMoved} lbs</span></h4>
-            <h4>Distance: <span className="calcResult">{averageDistance} m</span></h4>
-            <h4>Activity Time: <span className="calcResult">{averageTime} mins</span></h4>
-          </div>
-        </Card>
-      </Col>
-      {/* Your Favorite Workouts */}
-      <Col sm={12} lg={6}>
-        <Card className="p-2">
-          <Col xsm={12} className="text-right">
-              <input data-id="favoriteWorkouts" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
-          </Col><br/>
-          <div id="favoriteWorkouts" className="dispData" >
-            <h3>Your Top 3 Favorite Workouts</h3>
-            <h4>#1: <span className="calcResult">{favoriteWorkouts[0].workout} - {favoriteWorkouts[0].nums}</span></h4>
-            <h4>#2: <span className="calcResult">{favoriteWorkouts[1].workout} - {favoriteWorkouts[1].nums}</span></h4>
-            <h4>#3: <span className="calcResult">{favoriteWorkouts[2].workout} - {favoriteWorkouts[2].nums}</span></h4>
-          </div>
-        </Card>
-      </Col>
-      {/* Your Favorite Foods */}
-      <Col sm={12} lg={6}>
-        <Card className="p-2">
-          <Col xsm={12} className="text-right">
-              <input data-id="favoriteFoods" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
-          </Col><br/>
-          <div id="favoriteFoods" className="dispData" >
-            <h3>Your Top 3 Favorite Foods</h3>
-            <h4>#1: <span className="calcResult">{favoriteFoods[0].item} - {favoriteFoods[0].nums}</span></h4>
-            <h4>#2: <span className="calcResult">{favoriteFoods[1].item} - {favoriteFoods[1].nums}</span></h4>
-            <h4>#3: <span className="calcResult">{favoriteFoods[2].item} - {favoriteFoods[2].nums}</span></h4>
-          </div>
-        </Card>
-      </Col>
-      {/* What You Are Made Out Of */}
-      <Col sm={12} lg={6}>
-        <Card className="p-2">
+    <Accordion defaultActiveKey="1">
+      <Card className="dashboard">
+      <Card.Header>
+        <Accordion.Toggle as={ Button }  variant="link" eventKey="0"><h2>Charts</h2></Accordion.Toggle>
+      </Card.Header>
+      <Accordion.Collapse eventKey="0">  
+        <Card.Body>
           <Row>
-            <Col xsm={10}><h3>What You Are</h3></Col>
-            <Col xsm={2} className="text-right">
-              <input data-id="pictorialStackedChart" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
-            </Col>
+          {/* Total Plan Data Summary */}
+          <Col sm={12} lg={6}>
+            <Card className="p-2">
+              <Col xsm={12} className="text-right">
+                  <input data-id="totalDataSummary" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
+              </Col><br/>
+              <div id="totalDataSummary" className="dispData" >
+                <h3>Total Plan Data Summary</h3>
+                <h4>Total Calories: <span className="calcResult">{totalCalories} cal</span></h4>
+                <h4>Total Money Spent: <span className="calcResult">$ {totalMoneySpent}</span></h4>
+                <h4>Total Weight Moved: <span className="calcResult">{totalWeightMoved} lbs</span></h4>
+                <h4>Total Distance: <span className="calcResult">{totalDistance} m</span></h4>
+                <h4>Total Activity Time: <span className="calcResult">{totalTime} mins</span></h4>
+              </div>
+            </Card>
+          </Col>
+          {/* Weekly Average */}
+          <Col sm={12} lg={6}>
+            <Card className="p-2">
+              <Col xsm={12} className="text-right">
+                  <input data-id="weeklyAverage" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
+              </Col><br/>
+              <div id="weeklyAverage" className="dispData" >
+                <h3>Weekly Average</h3>
+                <h4>Calories: <span className="calcResult">{averageCalories} cal</span></h4>
+                <h4>Money Spent: <span className="calcResult">$ {averageMoneySpent}</span></h4>
+                <h4>Weight Moved: <span className="calcResult">{averageWeightMoved} lbs</span></h4>
+                <h4>Distance: <span className="calcResult">{averageDistance} m</span></h4>
+                <h4>Activity Time: <span className="calcResult">{averageTime} mins</span></h4>
+              </div>
+            </Card>
+          </Col>
+          {/* Your Favorite Workouts */}
+          <Col sm={12} lg={6}>
+            <Card className="p-2">
+              <Col xsm={12} className="text-right">
+                  <input data-id="favoriteWorkouts" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
+              </Col><br/>
+              <div id="favoriteWorkouts" className="dispData" >
+                <h3>Your Top 3 Favorite Workouts</h3>
+                <h4>#1: <span className="calcResult">{favoriteWorkouts[0].workout} - {favoriteWorkouts[0].nums}</span></h4>
+                <h4>#2: <span className="calcResult">{favoriteWorkouts[1].workout} - {favoriteWorkouts[1].nums}</span></h4>
+                <h4>#3: <span className="calcResult">{favoriteWorkouts[2].workout} - {favoriteWorkouts[2].nums}</span></h4>
+              </div>
+            </Card>
+          </Col>
+          {/* Your Favorite Foods */}
+          <Col sm={12} lg={6}>
+            <Card className="p-2">
+              <Col xsm={12} className="text-right">
+                  <input data-id="favoriteFoods" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
+              </Col><br/>
+              <div id="favoriteFoods" className="dispData" >
+                <h3>Your Top 3 Favorite Foods</h3>
+                <h4>#1: <span className="calcResult">{favoriteFoods[0].item} - {favoriteFoods[0].nums}</span></h4>
+                <h4>#2: <span className="calcResult">{favoriteFoods[1].item} - {favoriteFoods[1].nums}</span></h4>
+                <h4>#3: <span className="calcResult">{favoriteFoods[2].item} - {favoriteFoods[2].nums}</span></h4>
+              </div>
+            </Card>
+          </Col>
+          {/* What You Are Made Out Of */}
+          <Col sm={12} lg={6}>
+            <Card className="p-2">
+              <Row>
+                <Col xsm={10}><h3>What You Are</h3></Col>
+                <Col xsm={2} className="text-right">
+                  <input data-id="pictorialStackedChart" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
+                </Col>
+              </Row>
+              <div id="pictorialStackedChart" className="dispData" ></div>
+            </Card>
+          </Col>
+          {/* Body Weight by Day */}
+          <Col sm={12} lg={6}>
+            <Card>
+              <Row>
+                <Col xsm={10}><h3>Body Weight by Day</h3></Col>
+                <Col xsm={2} className="text-right">
+                  <input data-id="xyChart" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
+                </Col>
+              </Row>
+              <div id="xyChart" className="dispData" ></div>
+            </Card>
+          </Col>
+          <Col sm={12} lg={12}>
+            <Card>
+              <Row>
+              <Col xsm={10}><h3>Your Fitness Chart</h3></Col>
+              <Col xsm={2} className="text-right">
+                <input data-id="funnelChart" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
+              </Col>
+              </Row>
+              <div id="funnelChart" className="funnelData" ></div>
+            </Card>
+          </Col>
           </Row>
-          <div id="pictorialStackedChart" className="dispData" ></div>
-        </Card>
-      </Col>
-      {/* Body Weight by Day */}
-      <Col sm={12} lg={6}>
-        <Card>
-          <Row>
-            <Col xsm={10}><h3>Body Weight by Day</h3></Col>
-            <Col xsm={2} className="text-right">
-              <input data-id="xyChart" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
-            </Col>
-          </Row>
-          <div id="xyChart" className="dispData" ></div>
-        </Card>
-      </Col>
-      <Col sm={12} lg={12}>
-        <Card className="p-2">
-          <Row>
-            <Col xsm={10}><h3>Fitness Pie Chart</h3></Col>
-            <Col xsm={2} className="text-right">
-              <input data-id="pieChart" type="radio" name="dataSelection" onClick={handleChartSelect}></input>
-            </Col>
-          </Row>
-          <div id="pieChart" className="pieChartData" ></div>
-        </Card>
-      </Col>
-      </Row>
-      <div id="saveImgAlert" className="alert" style={{display: showAlert}}>You have not selected a data image to save.</div>
-      <Button variant="primary" className="m-auto" onClick={saveImage}>Save Selected Data Image</Button>
-    </Card>
+          <div id="saveImgAlert" className="alert" style={{display: showAlert}}>You have not selected a data image to save.</div>
+          <Button variant="primary" className="m-auto" onClick={saveImage}>Save Selected Data Image</Button>
+        </Card.Body>
+      </Accordion.Collapse>
+      </Card>
+    </Accordion>
   );
 }
 
