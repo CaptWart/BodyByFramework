@@ -14,17 +14,12 @@ export default {
   getUser: function(id) {
     return axios.get(server + "/api/users/" + id);
   },
-  // Deletes the user with the given id
-  deleteUser: function(id) {
-    return axios.delete(server + "/api/users/" + id);
-  },
   /* Plan */
   // Get all plans with the given userID
   getAllPlans: function(userID) {
     return axios({
       method: 'get',
       url: server + "/api/plans",
-      // withCredentials: true,
       params: {
         userID: userID
       }

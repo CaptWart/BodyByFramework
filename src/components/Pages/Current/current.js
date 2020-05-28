@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import API from "../../Utils/API";
 import EverythingTracker from "../../EverythingTracker";
+import "../../EverythingTracker/style.css";
 
 export function Current() {
     const [user, setUser] = useState([]);
@@ -19,6 +19,7 @@ export function Current() {
             else{
                 const json = await response.json();
                 setUser(json)
+
             }
         }
         fetchUser()
@@ -35,10 +36,11 @@ export function Current() {
           .then(res => {
             setPlans(res.data)
           })
-          .catch(err => console.log(err));
+          .catch(err => {});
     };
 
     return (
+<<<<<<< HEAD
         <div>
             <Link to="/logout">
                 <button type="button">
@@ -46,6 +48,9 @@ export function Current() {
                 </button>
             </Link>
 
+=======
+        <div id="current">
+>>>>>>> ad816a1db6685571ffc2e6e02f038b6a3cf761c6
             <EverythingTracker
                 userID={user._id}
                 nickname={user.nickname}

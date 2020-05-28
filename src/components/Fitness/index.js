@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import { Accordion, Card, Button, ButtonGroup, ToggleButton, Form } from "react-bootstrap";
-// import StrengthForm from "../Forms/StrengthForm";
-// import ActivityForm from "../Forms/ActivityForm";
+import { Accordion, Card, Button, ToggleButtonGroup, ToggleButton, Form } from "react-bootstrap";
 
 function Fitness(props) {
   const [type, setType] = useState("strength");
   const [strengthForm, setStrengthForm] = useState("block");
   const [activityForm, setActivityForm] = useState("none");
-  const [activeKey, setActiveKey] = useState('');
 
   const handleTypeChange = e => {
     setType(e.target.value);
@@ -22,7 +19,7 @@ function Fitness(props) {
     <div>
       <Accordion>
       {props.fitnesses.map((fitness, index) => 
-        <Card>
+        <Card key={fitness._id}>
           <Card.Header>
             <Accordion.Toggle
               name={fitness._id}
@@ -49,7 +46,7 @@ function Fitness(props) {
                     />
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label>Weight</Form.Label>
+                    <Form.Label>Weight (lbs)</Form.Label>
                     <Form.Control
                       key={fitness._id}
                       name="weight"
@@ -91,7 +88,7 @@ function Fitness(props) {
                     />
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label>Distance</Form.Label>
+                    <Form.Label>Distance (km)</Form.Label>
                     <Form.Control
                       name="distance"
                       type="text"
@@ -100,7 +97,7 @@ function Fitness(props) {
                     />
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label>Time</Form.Label>
+                    <Form.Label>Time (minutes)</Form.Label>
                     <Form.Control
                       name="time"
                       type="text"
@@ -150,10 +147,10 @@ function Fitness(props) {
           </Card.Header>
           <Accordion.Collapse eventKey="new">
             <Card.Body>
-              <ButtonGroup toggle>
-                <ToggleButton type="radio" value={"strength"} size="sm" onChange={handleTypeChange}>Strength</ToggleButton>
-                <ToggleButton type="radio" value={"activity"}  size="sm" onChange={handleTypeChange}>Activity</ToggleButton>
-              </ButtonGroup>
+              <ToggleButtonGroup toggle name="fitnessType">
+                <ToggleButton type="radio" name="fitnessType" value={"strength"} size="sm" onChange={handleTypeChange}>Strength</ToggleButton>
+                <ToggleButton type="radio" name="fitnessType" value={"activity"}  size="sm" onChange={handleTypeChange}>Activity</ToggleButton>
+              </ToggleButtonGroup>
               <Form id="newStrength" className="newFitnessForm" style={{ display: strengthForm }}>
                 <Form.Group>
                   <Form.Label>Workout</Form.Label>
@@ -164,7 +161,7 @@ function Fitness(props) {
                   />
                 </Form.Group>
                 <Form.Group>
-                  <Form.Label>Weight</Form.Label> 
+                  <Form.Label>Weight (lbs)</Form.Label> 
                   <Form.Control
                     name="weight" 
                     type="text" 
@@ -211,7 +208,7 @@ function Fitness(props) {
                 />
                 </Form.Group>
                 <Form.Group>
-                  <Form.Label>Distance</Form.Label>
+                  <Form.Label>Distance (km)</Form.Label>
                   <Form.Control
                     name="distance"
                     type="text" 
@@ -219,7 +216,7 @@ function Fitness(props) {
                   />
                 </Form.Group>
                 <Form.Group>
-                  <Form.Label>Time</Form.Label>
+                  <Form.Label>Time (minutes)</Form.Label>
                   <Form.Control
                     name="time"
                     type="text" 

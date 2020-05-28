@@ -1,18 +1,27 @@
 .calcResult {
   color: #0683d7;
-  font-size: 1.5em;
+  font-size: 1.2em;
 }
 
 .dispData {
   background-color: white;
-  height: 296px !important;
-  width: 274px !important;
+  height: 264px !important;
+  width: 244px !important;
 }
 
 .pieChartData {
   background-color: white;
+  /* height: 300px !important;
+  width: 350px !important; */
+  height: 264px !important;
+  width: 244px !important;
+}
+
+.funnelData {
+  background-color: white;
   height: 300px !important;
   width: 350px !important;
+  
 }
 
 #imageToSave {
@@ -21,3 +30,6 @@
   width: 274px !important;
 }
 
+.dashboard {
+  background-color: lightblue !important;
+}

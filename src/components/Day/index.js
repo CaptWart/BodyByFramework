@@ -62,7 +62,18 @@ function Day(props) {
                     onChange={props.handleBodyWeightEntry}
                   />
               </Form.Group>
-              <div id="saveBodyWeightAlert" className="alert" style={{display: showAlert}}>Body Weight needs to be a number.</div>
+              <div id="saveBodyWeightAlert" className="alert" style={{display: showAlert}}>
+                Body Weight needs to be a number.
+                <Button
+                  name="createBtn"
+                  variant="primary" 
+                  size="sm"
+                  type="submit"
+                  onClick={props.handleCancelEditBodyWeight}
+                >
+                  Cancel Edit
+                </Button>
+              </div>
               <Button
                 name="createBtn"
                 variant="primary" 
