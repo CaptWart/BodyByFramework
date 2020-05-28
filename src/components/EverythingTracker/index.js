@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import useSetState from "../Utils/useSetState";
-import { Accordion, Card, Button } from "react-bootstrap";
+import { Accordion, Card, Button, Row, Col } from "react-bootstrap";
 import API from "../Utils/API";
 import Dashboard from "../Dashboard";
 import Plan from "../Plan";
@@ -32,6 +33,7 @@ function EverythingTracker(props) {
   const [days, setDays] = useState([]);
   const [dayID, setDayID] = useState("");
   const [bodyWeight, setBodyWeight] = useState();
+  const [bodyWeightState, setBodyWeightState] = useState({});
   const [lastDay, setLastDay] = useState({});
   const [fitnesses, setFitnesses] = useState([]);
   const [foods, setFoods] = useState([]);
@@ -49,6 +51,12 @@ function EverythingTracker(props) {
       setPlanID(plans[0]._id);
     }
   }, [props.plans]);
+
+  useEffect(() => {
+    if(plans.length === 1) {
+      setPlanID(plans[0]._id);
+    }
+  },[plans])
 
   // Call loadDays(set days) when planID changes.
   useEffect(() => {
@@ -89,7 +97,7 @@ function EverythingTracker(props) {
       .then(res => {
         setPlans(res.data)
       })
-      .catch(err => console.log(err));
+      .catch(err => {});
   };
 
   // Create Plan.
@@ -98,11 +106,8 @@ function EverythingTracker(props) {
     API.createPlan(planData)
     .then(res => {
       loadPlans(userID);
-      console.log("Plan data created: ", res.data)
     })
-    .catch(err => {
-      console.log(err)
-    })
+    .catch(err => {})
   }
 
   // UpdatePlan.
@@ -110,11 +115,8 @@ function EverythingTracker(props) {
     API.updatePlan(planID, planState)
     .then(res => {
       loadPlans(userID);
-      console.log("Plan data updated: ", res.data)
     })
-    .catch(err => {
-      console.log(err)
-    })
+    .catch(err => {})
   }
 
    // Delete Plan.
@@ -122,11 +124,8 @@ function EverythingTracker(props) {
     API.deletePlan(planID)
     .then(res => {
       loadPlans(userID);
-      console.log("Fitness data deleted: ", res.data)
     })
-    .catch(err => {
-      console.log(err)
-    })
+    .catch(err => {})
   }
 
   /* Day(s) API call */
@@ -136,9 +135,7 @@ function EverythingTracker(props) {
     .then(res => {
         setDays(res.data);
     })
-    .catch(err => 
-      console.log(err)
-    );
+    .catch(err => {});
   };
 
   function loadDay(dayID) {
@@ -146,19 +143,14 @@ function EverythingTracker(props) {
     .then(res => {
       setBodyWeight(res.data.bodyWeight);
     })
-    .catch(err =>
-      console.log(err)
-    );
+    .catch(err => {});
   }
   const loadLastDay = planID => {
     API.getLastDay(planID)
     .then(res => {
       setLastDay(res.data);
-      console.log("res.data: ", res.data);
     })
-    .catch(err =>
-      console.log(err)
-    );
+    .catch(err => {});
   }
 
   // Create Day.
@@ -168,38 +160,29 @@ function EverythingTracker(props) {
     .then(res => {
       loadDays(planID);
       loadLastDay(planID);
-      console.log("Day data created: ", res.data)
     })
-    .catch(err => {
-      console.log(err)
-    })
+    .catch(err => {})
   }
 
   // Update Day.
   function updateDay(dayID) {
-    API.updateDay(dayID, bodyWeight)
+    // API.updateDay(dayID, bodyWeight)
+    API.updateDay(dayID, bodyWeightState)
     .then(res => {
       loadDays(planID);
       loadDay(dayID);
-      console.log("Body Weight data updated: ", res.data)
     })
-    .catch(err => {
-      console.log(err)
-    })
+    .catch(err => {})
   }  
 
   // Delete Day.
   function deleteDay(dayID) {
-    console.log("lastDay: ", lastDay);
     API.deleteDay(dayID)
     .then(res => {
       loadDays(planID);
       loadLastDay(planID);
-      console.log("Day data deleted: ", res.data)
     })
-    .catch(err => {
-      console.log(err)
-    })
+    .catch(err => {})
   }
 
   /* Fitness(es) API call */
@@ -209,9 +192,7 @@ function EverythingTracker(props) {
     .then(res => {
       setFitnesses(res.data);
     })
-    .catch(err =>
-      console.log(err)
-    );
+    .catch(err => {});
   }
 
   // Load Fitness (single).
@@ -220,9 +201,7 @@ function EverythingTracker(props) {
     .then(res => {
       setFitnessState(res.data);
     })
-    .catch(err =>
-      console.log(err)
-    );
+    .catch(err => {});
   }
 
   // Create Fitness.
@@ -230,11 +209,8 @@ function EverythingTracker(props) {
     API.createFitness(data)
     .then(res => {
       loadFitnesses(dayID);
-      console.log("Fitness data created: ", res.data)
     })
-    .catch(err => {
-      console.log(err)
-    })
+    .catch(err => {})
   }
 
   // Update Fitness.
@@ -242,11 +218,8 @@ function EverythingTracker(props) {
     API.updateFitness(fitnessID, fitnessState)
     .then(res => {
       loadFitnesses(dayID);
-      console.log("Fitness data updated: ", res.data)
     })
-    .catch(err => {
-      console.log(err)
-    })
+    .catch(err => {})
   }
 
   // Delete Fitness.
@@ -254,11 +227,8 @@ function EverythingTracker(props) {
     API.deleteFitness(fitnessID)
     .then(res => {
       loadFitnesses(dayID);
-      console.log("Fitness data deleted: ", res.data)
     })
-    .catch(err => {
-      console.log(err)
-    })
+    .catch(err => {})
   }
 
   /* Food(s) API call */
@@ -268,9 +238,7 @@ function EverythingTracker(props) {
     .then(res => {
       setFoods(res.data);
     })
-    .catch(err =>
-      console.log(err)
-    );
+    .catch(err => {});
   }
 
   // Load Food (single).
@@ -279,9 +247,7 @@ function EverythingTracker(props) {
     .then(res => {
       setFoodState(res.data);
     })
-    .catch(err =>
-      console.log(err)
-    );
+    .catch(err => {});
   }
 
   // Create Food.
@@ -289,22 +255,17 @@ function EverythingTracker(props) {
     API.createFood(data)
     .then(res => {
       loadFoods(dayID);
-      console.log("Food data created: ", res.data)
     })
-    .catch(err => {
-      console.log(err)
-    })
+    .catch(err => {})
   }
 
   // Update Food.
   function updateFood(foodID) {
     API.updateFood(foodID, foodState)
     .then(res => {
-      console.log("Food data updated: ", res.data)
+      loadFoods(dayID);
     })
-    .catch(err => {
-      console.log(err)
-    })
+    .catch(err => {})
   }
 
   // Delete Food.
@@ -312,11 +273,8 @@ function EverythingTracker(props) {
     API.deleteFood(foodID)
     .then(res => {
       loadFoods(dayID);
-      console.log("Food data deleted: ", res.data)
     })
-    .catch(err => {
-      console.log(err)
-    })
+    .catch(err => {})
   }
 
   /* Plan event handling */
@@ -327,7 +285,10 @@ function EverythingTracker(props) {
   }
 
   const handlePlanChange = e => {
-    document.getElementById("existingPlanNameForm").reset();
+    const editPlanForm = document.getElementById("existingPlanNameForm");
+    if(editPlanForm){
+      editPlanForm.reset();
+    }
     setPlanID(e.target.value);
   }
 
@@ -362,6 +323,7 @@ function EverythingTracker(props) {
   const handleDayChange = e => {
     const id = e.target.value;
     document.getElementById("bodyWeightForm").reset();
+    document.getElementById("saveBodyWeightAlert").style.display = "none";
     setDayID(id);
     loadDay(id);
   }
@@ -375,7 +337,7 @@ function EverythingTracker(props) {
   }
 
   const handleBodyWeightEntry = e => {
-    setBodyWeight({
+    setBodyWeightState({
       bodyWeight: e.target.value
     });
   }
@@ -383,7 +345,6 @@ function EverythingTracker(props) {
   const handleSaveBodyWeight = e => {
     e.preventDefault();
     const weight = document.getElementById("bodyWeight").value;
-    console.log("weight: ", weight);
     if(isNaN(weight) || weight === "") {
       document.getElementById("saveBodyWeightAlert").style.display = "block";        
     } else {
@@ -392,8 +353,13 @@ function EverythingTracker(props) {
     }
   }
 
+  const handleCancelEditBodyWeight = e => {
+    e.preventDefault();
+    document.getElementById("bodyWeightForm").reset();
+    document.getElementById("saveBodyWeightAlert").style.display = "none";
+  }
+
   const handleDeleteDay = e => {
-    // e.preventDefault();
     const dayID = lastDay[0]._id;
     deleteDay(dayID);
   }
@@ -401,12 +367,9 @@ function EverythingTracker(props) {
   /* Fitness event handling */
   const handleSetFitness = e => {
     if(e.target.name === "new") {
-      console.log("here! about to add new fitness!");
       setFitnessState(initialFitnessState);
     } 
     else {
-      console.log("eventKey: ", e.target.eventKey);
-      console.log("fitnessState: ", fitnessState);
       const fitnessID = e.target.name;
       loadFitness(fitnessID);
     }
@@ -426,24 +389,24 @@ function EverythingTracker(props) {
 
       if(type === "strength") {
         if(fitnessData.workout === "" || isNaN(fitnessData.weight) || isNaN(fitnessData.sets) || isNaN(fitnessData.reps)) {
-          console.log("bad data!");
           document.getElementById("strengthSaveAlert").style.display = "block"; 
         } else {
-          console.log("good data!");
           document.getElementById("strengthSaveAlert").style.display = "none";
-          clearFitness(); // Reset the fitnessState with the initial values.
-          createFitness(fitnessData);
-          document.getElementById('newStrength').reset();
-        }
-      } else {
-        if(fitnessData.workout === "" || isNaN(fitnessData.distance) || isNaN(fitnessData.time)) {
-          console.log("bad data!");
-          document.getElementById("activitySaveAlert").style.display = "block"; 
-        } else {
-          console.log("good data!");
           document.getElementById("activitySaveAlert").style.display = "none";
           clearFitness(); // Reset the fitnessState with the initial values.
           createFitness(fitnessData);
+          document.getElementById('newStrength').reset();
+          document.getElementById('newActivity').reset();
+        }
+      } else {
+        if(fitnessData.workout === "" || isNaN(fitnessData.distance) || isNaN(fitnessData.time)) {
+          document.getElementById("activitySaveAlert").style.display = "block"; 
+        } else {
+          document.getElementById("strengthSaveAlert").style.display = "none";
+          document.getElementById("activitySaveAlert").style.display = "none";
+          clearFitness(); // Reset the fitnessState with the initial values.
+          createFitness(fitnessData);
+          document.getElementById('newStrength').reset();
           document.getElementById('newActivity').reset();
         }
       }
@@ -485,12 +448,9 @@ function EverythingTracker(props) {
     e.preventDefault();
     if(e.target.name === "createBtn") {
       const foodData = {...foodState, userID: userID, planID: planID, dayID: dayID};
-      console.log("foodData: ", foodData);
       if(foodData.item === "" || isNaN(foodData.calories) || isNaN(foodData.price)) {
-        console.log("bad data!");
         document.getElementById("foodSaveAlert").style.display = "block"; 
       } else {
-        console.log("good data!");
         document.getElementById("foodSaveAlert").style.display = "none";
         clearFood();  // Reset the foodState with the initial values.
         createFood(foodData);
@@ -514,9 +474,20 @@ function EverythingTracker(props) {
   }
 
   return (
-    <Card className="containerCard col-sm-12 col-lg-8 col-xl-6 mx-auto">
+    <Card className="everythingTracker containerCard col-sm-12 col-lg-8 col-xl-6 mx-auto">
       <div>
-        <h1>{props.nickname}'s BBF Tracker</h1>
+        <Row>
+          <Col xsm={12} sm={10}>
+            <h1>{props.nickname}'s BBF Tracker</h1>
+          </Col>
+          <Col xsm={12} sm={2} className="text-right">
+            <Link to="/logout">
+              <Button type="button">
+                  Logout
+              </Button>
+            </Link>
+          </Col>
+        </Row>
       </div>
       <div>
         <Plan
@@ -536,8 +507,8 @@ function EverythingTracker(props) {
           foods={foods}
 
         />
-        <Card className="containerCard">
-        {props.plans.length > 0 ?
+        <Card className="dataEntry containerCard">
+        {plans.length > 0 ?
           <Day 
             days={days}
             lastDay={lastDay}
@@ -547,6 +518,7 @@ function EverythingTracker(props) {
             handleDeleteDay={handleDeleteDay}
             handleBodyWeightEntry={handleBodyWeightEntry}
             handleSaveBodyWeight={handleSaveBodyWeight}
+            handleCancelEditBodyWeight={handleCancelEditBodyWeight}
           />
           : null
         }

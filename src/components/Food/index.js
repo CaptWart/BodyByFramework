@@ -6,7 +6,7 @@ function Food(props) {
     <div>
       <Accordion>
       {props.foods.map(food => 
-        <Card>
+        <Card key={food._id}>
           <Card.Header>
             <Accordion.Toggle
               name={food._id}

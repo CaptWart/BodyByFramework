@@ -121,22 +121,6 @@ function Plan(props) {
           </Form>
         </Card>
       }
-
-
-      {/* {props.plans.length > 0 &&
-        <Form.Group>
-          <Form.Label>Select Your Plan</Form.Label>
-          <Form.Control 
-            as="select" 
-            multiple
-            onChange={props.handlePlanChange}
-          >
-            {props.plans.map(plan => (
-              <option value={plan._id}>{plan.name}</option>
-            ))}
-          </Form.Control>
-        </Form.Group>
-      } */}
     </div>
   )
 }
