@@ -54,7 +54,7 @@ export function Create(props) {
         }
 
         else {
-            fetch('http://ec2-100-26-225-56.compute-1.amazonaws.com/createUser', {
+            fetch('http://ec2-54-163-74-245.compute-1.amazonaws.com/createUser', {
                 method: 'POST',
                 mode: 'cors',
                 redirect: 'follow',

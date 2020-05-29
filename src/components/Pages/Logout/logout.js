@@ -3,7 +3,7 @@ import React from "react";
 
 export function Logout(){
     
-    fetch('http://ec2-100-26-225-56.compute-1.amazonaws.com/logout', {
+    fetch('http://ec2-54-163-74-245.compute-1.amazonaws.com/logout', {
         method: "GET",
         headers: {
           'Accept': 'application/json',

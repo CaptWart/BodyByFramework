@@ -18,7 +18,7 @@ export function ForgotChange() {
         headers.append('Content-Type', 'application/json');
         headers.append('Accept', 'application/json');
       
-          fetch('http://ec2-100-26-225-56.compute-1.amazonaws.com/passwordReset'+window.location.search, {
+          fetch('http://ec2-54-163-74-245.compute-1.amazonaws.com/passwordReset'+window.location.search, {
             method: 'POST',
             credentials: "include",
             headers: headers,
