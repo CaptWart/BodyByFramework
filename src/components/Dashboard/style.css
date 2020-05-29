@@ -11,16 +11,14 @@
 
 .pieChartData {
   background-color: white;
-  /* height: 300px !important;
-  width: 350px !important; */
   height: 264px !important;
   width: 244px !important;
 }
 
 .funnelData {
   background-color: white;
-  height: 300px !important;
-  width: 350px !important;
+  height: 264px !important;
+  width: 250px !important;
   
 }
 
