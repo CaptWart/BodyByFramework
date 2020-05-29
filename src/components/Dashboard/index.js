@@ -324,9 +324,6 @@ function Dashboard(props) {
     grouper.threshold = 10;
     grouper.groupName = "Other";
     grouper.clickBehavior = "break";
-    
-    series.labelsContainer.paddingLeft = 15;
-    series.labelsContainer.width = 200;
   }
 
   // Chart checkbox event handling

@@ -149,6 +149,11 @@ function EverythingTracker(props) {
     API.getLastDay(planID)
     .then(res => {
       setLastDay(res.data);
+      if(res.data[0].day === 1) {
+        document.getElementById("bodyWeightForm").reset();
+        document.getElementById("saveBodyWeightAlert").style.display = "none";
+        loadDay(res.data._id);
+      }
     })
     .catch(err => {});
   }
@@ -286,6 +291,8 @@ function EverythingTracker(props) {
 
   const handlePlanChange = e => {
     const editPlanForm = document.getElementById("existingPlanNameForm");
+    document.getElementById("bodyWeightForm").reset();
+    document.getElementById("saveBodyWeightAlert").style.display = "none";
     if(editPlanForm){
       editPlanForm.reset();
     }
