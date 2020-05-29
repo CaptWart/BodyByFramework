@@ -9,7 +9,7 @@ export function Current() {
 
     React.useEffect(function effectFunction() {
         async function fetchUser() {
-            const response = await fetch('http://ec2-3-13-138-147.us-east-2.compute.amazonaws.com/current', { method: "GET", credentials: 'include' })
+            const response = await fetch('http://ec2-100-26-225-56.compute-1.amazonaws.com/current', { method: "GET", credentials: 'include' })
             if(!response || response.status === 500 || response.status === 401){
                 window.location.href = "/login";
             }
@@ -40,17 +40,7 @@ export function Current() {
     };
 
     return (
-<<<<<<< HEAD
-        <div>
-            <Link to="/logout">
-                <button type="button">
-                    Logout
-                </button>
-            </Link>
-
-=======
         <div id="current">
->>>>>>> ad816a1db6685571ffc2e6e02f038b6a3cf761c6
             <EverythingTracker
                 userID={user._id}
                 nickname={user.nickname}

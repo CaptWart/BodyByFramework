@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const server = "http://ec2-3-13-138-147.us-east-2.compute.amazonaws.com";
+const server = "http://ec2-100-26-225-56.compute-1.amazonaws.com";
 // const server = "http://localhost:3001";
 
 
