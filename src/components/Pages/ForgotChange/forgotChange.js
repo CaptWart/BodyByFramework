@@ -4,6 +4,7 @@ export function ForgotChange() {
   const [password, setPassword] = useState("");
   const passwordFormat = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
   const [passwordCheck, setPasswordCheck] = useState("none")
+  const backendlocal = 'http://localhost:3001/'
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -18,7 +19,7 @@ export function ForgotChange() {
         headers.append('Content-Type', 'application/json');
         headers.append('Accept', 'application/json');
       
-          fetch('http://ec2-54-163-74-245.compute-1.amazonaws.com/passwordReset'+window.location.search, {
+          fetch(backendlocal+'passwordReset'+window.location.search, {
             method: 'POST',
             credentials: "include",
             headers: headers,

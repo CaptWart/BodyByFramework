@@ -18,11 +18,15 @@ function Plan(props) {
   }
 
   const loadPlan = planID => {
-    API.getPlan(planID)
-    .then(res => {
-      setSelectedPlan(res.data);
-    })
-    .catch(err =>{});
+    // console.log(props.plans.find( ({_id}) => _id === planID ))
+    // console.log(planID)
+    setSelectedPlan(props.plans.find( ({_id}) => _id === planID ))
+    // API.getPlan(planID)
+    // .then(res => {
+    //   setSelectedPlan(res.data);
+    //   console.log(res.data)
+    // })
+    // .catch(err =>{});
   }
   
   return (

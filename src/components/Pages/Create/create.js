@@ -11,7 +11,7 @@ export function Create(props) {
     const [emailUse, setEmailUse] = useState("none")
     const [emailCheck, setEmailCheck] = useState("none")
     const [passwordCheck, setPasswordCheck] = useState("none")
-
+    const backendlocal = 'http://localhost:3001/'
 
     const ageCheckHandler = () => {
         setAgeCheck(!ageCheck);
@@ -54,7 +54,7 @@ export function Create(props) {
         }
 
         else {
-            fetch('http://ec2-54-163-74-245.compute-1.amazonaws.com/createUser', {
+            fetch(backendlocal+'createUser', {
                 method: 'POST',
                 mode: 'cors',
                 redirect: 'follow',

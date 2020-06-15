@@ -12,6 +12,7 @@ import "./style.css";
 am4core.useTheme(am4themes_material);
 
 function Dashboard(props) {
+  //console.log(props)
   const [allFitnesses, setAllFitnesses] = useState([]);
   const [allFoods, setAllFoods] = useState([]);
   const [totalWeightMoved, setTotalWeightMoved] = useState(0);
@@ -23,19 +24,24 @@ function Dashboard(props) {
   const [showAlert, setShowAlert] = useState("none");
 
   const loadAllFitnesses = planID => {
-    API.getAllFitnesses(planID)
-    .then(res => {
-      setAllFitnesses(res.data);
-    })
-    .catch(err => {});
+    setAllFitnesses(props.fitnesses)
+
+    // API.getAllFitnesses(planID)
+    // .then(res => {
+    //   setAllFitnesses(res.data);
+    //   console.log(res.data)
+    // })
+    // .catch(err => {});
   }
 
   const loadAllFoods = planID => {
-    API.getAllFoods(planID)
-    .then(res => {
-      setAllFoods(res.data);
-    })
-    .catch(err => {});
+    //console.log('hi')
+    setAllFoods(props.foods)
+    // API.getAllFoods(planID)
+    // .then(res => {
+    //   setAllFoods(res.data);
+    // })
+    // .catch(err => {});
   }
 
   // Calculate total weight moved
@@ -80,7 +86,7 @@ function Dashboard(props) {
       totalPrice = prices.reduce((acc, cur) => acc + cur);
     }
     setTotalCalories(totalCal);
-    setTotalMoneySpent(totalPrice);
+    setTotalMoneySpent(totalPrice.toFixed(2));
   }
 
   const createXYChartData = data => {
@@ -264,13 +270,14 @@ function Dashboard(props) {
     series.alignLabels = false;
 
     let grouper = series.plugins.push(new am4plugins_sliceGrouper.SliceGrouper());
-    grouper.threshold = 5;
+    grouper.threshold = 3;
     grouper.groupName = "Other";
     grouper.clickBehavior = "break";
 
     series.maskSprite.path = iconPath;
     series.ticks.template.locationX = 1;
     series.ticks.template.locationY = 0.5;
+    series.align = "left";
 
     chart.defaultState.transitionDuration = 0;
     

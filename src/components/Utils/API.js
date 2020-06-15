@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const server = "http://ec2-54-163-74-245.compute-1.amazonaws.com";
-// const server = "http://localhost:3001";
+//const server = "http://ec2-54-163-74-245.compute-1.amazonaws.com";
+const server = "http://localhost:3001";
 
 
 export default {
@@ -11,12 +11,20 @@ export default {
     return axios.get(server + "/api/users");
   },
   // Gets the user with the given id
-  getUser: function(id) {
-    return axios.get(server + "/api/users/" + id);
+  getUser: function(userID) {
+    //return axios.get(server + "/api/users/" + id);
+    return axios({
+      method: 'get',
+      url: server + "/api/users/"+userID
+      // params: {
+      //   userID: userID
+      // }
+    });
   },
   /* Plan */
   // Get all plans with the given userID
   getAllPlans: function(userID) {
+    console.log("allplans")
     return axios({
       method: 'get',
       url: server + "/api/plans",

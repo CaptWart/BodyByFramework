@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 export function Forgot() {
   const [email, setEmail] = useState("");
+  const backendlocal = 'http://localhost:3001/'
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -10,7 +11,7 @@ export function Forgot() {
   headers.append('Content-Type', 'application/json');
   headers.append('Accept', 'application/json');
 
-    fetch('http://ec2-54-163-74-245.compute-1.amazonaws.com/sendPasswordReset', {
+    fetch(backendlocal+'sendPasswordReset', {
       method: 'POST',
       credentials: "include",
       headers: headers,

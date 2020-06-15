@@ -6,10 +6,12 @@ import "../../EverythingTracker/style.css";
 export function Current() {
     const [user, setUser] = useState([]);
     const [plans, setPlans] = useState([]);
+    const backendlocal = 'http://localhost:3001/'
+
 
     React.useEffect(function effectFunction() {
         async function fetchUser() {
-            const response = await fetch('http://ec2-54-163-74-245.compute-1.amazonaws.com/current', { method: "GET", credentials: 'include' })
+            const response = await fetch(backendlocal+'current', { method: "GET", credentials: 'include' })
             if(!response || response.status === 500 || response.status === 401){
                 window.location.href = "/login";
             }
@@ -19,25 +21,20 @@ export function Current() {
             else{
                 const json = await response.json();
                 setUser(json)
-
+                //console.log(json)
+                const info = await API.getUser(json._id)
+                .then(res => {
+                  //console.log(res.data.plans)
+                  setPlans(res.data.plans)
+                })
+                .catch(err => {});
+                
             }
         }
         fetchUser()
 
     }, []);
 
-    useEffect(() => {
-        loadPlans(user._id)
-    }, [user._id]); 
-
-    // Load Plans of the user
-    function loadPlans(userID) {
-        API.getAllPlans(userID)
-          .then(res => {
-            setPlans(res.data)
-          })
-          .catch(err => {});
-    };
 
     return (
         <div id="current">

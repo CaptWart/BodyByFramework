@@ -2,8 +2,9 @@ import React from "react";
 
 
 export function Logout(){
-    
-    fetch('http://ec2-54-163-74-245.compute-1.amazonaws.com/logout', {
+  const backendlocal = 'http://localhost:3001/'
+
+    fetch(backendlocal+'logout', {
         method: "GET",
         headers: {
           'Accept': 'application/json',

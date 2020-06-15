@@ -6,6 +6,7 @@ export function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [badLogin, setBadLogin] = useState("none")
+  const backendlocal = 'http://localhost:3001/'
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -14,7 +15,7 @@ export function Login(props) {
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
 
-    fetch('http://ec2-54-163-74-245.compute-1.amazonaws.com/login', {
+    fetch(backendlocal+'login', {
       method: 'POST',
       mode: 'cors',
       redirect: 'follow',
