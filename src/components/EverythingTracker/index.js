@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import useSetState from "../Utils/useSetState";
-import { Accordion, Card, Button, Row, Col } from "react-bootstrap";
+import { Accordion, Card, Button, Row, Col, Modal, ListGroup } from "react-bootstrap";
 import API from "../Utils/API";
 import Dashboard from "../Dashboard";
 import Plan from "../Plan";
@@ -42,6 +42,8 @@ function EverythingTracker(props) {
   const [fitnessState, setFitnessState] = useSetState(previousFitness);
   const [foodState, setFoodState] = useSetState(previousFood);
   const [plans, setPlans] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [dayToCopy, setDayToCopy] = useState();
 
   // Call setPlanID when props.plans are passed (beginning).
   useEffect(() => {
@@ -424,6 +426,28 @@ function EverythingTracker(props) {
     }
   }
 
+  const handleCopyFitness = (dayToCopy, data) => {
+    const fitnessData = {...data, dayID: dayToCopy};
+    createFitness(fitnessData);
+  }
+
+  const handleCopyFitnessList = e => {
+    fitnesses.forEach(fitness => {
+      const fitnessData = { 
+        userID: fitness.userID,
+        planID: fitness.planID,
+        workout: fitness.workout,
+        type: fitness.type,
+        weight: fitness.weight,
+        sets: fitness.sets,
+        reps: fitness.reps,
+        distance: fitness.distance,
+        time: fitness.time
+      }
+      handleCopyFitness(dayToCopy, fitnessData);
+    })
+  }
+
   const handleDeleteFitness = e => {
     // e.preventDefault();
     const fitnessID = e.target.value;
@@ -478,6 +502,18 @@ function EverythingTracker(props) {
 
   const clearFood = () => {
     setFoodState(initialFoodState);
+  }
+
+  const handleShowModal = e => {
+    if(showModal === false) {
+      setShowModal(true);
+    } else {
+      setShowModal(false);
+    }
+  }
+
+  const handleDayToCopyChange = e => {
+    setDayToCopy(e.target.value);
   }
 
   return (
@@ -538,15 +574,30 @@ function EverythingTracker(props) {
                 <Card.Header>
                   <Accordion.Toggle as={Button} variant="link" eventKey="0">
                     Fitnesses
+                    {fitnesses.length > 0 ?
+                      <Button
+                        name="showModalBtn"
+                        variant="primary"
+                        size="sm"
+                        className="mx-2" 
+                        value={dayID}
+                        onClick={handleShowModal}
+                      >
+                        Copy
+                      </Button>
+                    : null
+                    }
                   </Accordion.Toggle>
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                   <Card.Body>
                     <Fitness
                       fitnesses={fitnesses}
+                      days={days}
                       handleSetFitness={handleSetFitness}
                       handleFitnessEntry={handleFitnessEntry}
                       handleSaveFitness={handleSaveFitness}
+                      handleCopyFitness={handleCopyFitness}
                       handleDeleteFitness={handleDeleteFitness}
                     />
                   </Card.Body>
@@ -576,6 +627,36 @@ function EverythingTracker(props) {
         }
         </Card>
       </div>
+
+      <Modal show={showModal} onHide={handleShowModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Fitnesses</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ListGroup>
+          {fitnesses.map(fitness => (
+            <ListGroup.Item>{fitness.workout}</ListGroup.Item>
+          ))}
+          </ListGroup>
+          <label>Select the Day to Copy the Fitnesses</label><br/>
+          <select id="days" onChange={handleDayToCopyChange}>
+            {days.map(day => (
+              <option key={day._id} value={day._id}>Day: {day.day}</option>
+            ))}
+          </select>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="primary" 
+            onClick={() => {handleCopyFitnessList(); handleShowModal();}}
+          >
+            Copy
+          </Button>
+          <Button variant="secondary" onClick={handleShowModal}>
+            Candel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Card>
   );
 }
