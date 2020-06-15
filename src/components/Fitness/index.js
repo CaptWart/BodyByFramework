@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { Accordion, Card, Button, ToggleButtonGroup, ToggleButton, Form } from "react-bootstrap";
+import { Accordion, Card, Button, ToggleButtonGroup, ToggleButton, Form, Modal } from "react-bootstrap";
 
 function Fitness(props) {
   const [type, setType] = useState("strength");
   const [strengthForm, setStrengthForm] = useState("block");
   const [activityForm, setActivityForm] = useState("none");
+  const [showModal, setShowModal] = useState(false);
+  const [fitnessToCopy, setFitnessToCopy] = useState({});
+  const [dayToCopy, setDayToCopy] = useState();
 
   const handleTypeChange = e => {
     setType(e.target.value);
@@ -13,6 +16,33 @@ function Fitness(props) {
 
     if(activityForm === "block") setActivityForm("none");
     else setActivityForm("block");
+  }
+
+  const handleShowModal = e => {
+    if(showModal === false) {
+      const index = e.target.value;
+      const data = props.fitnesses[index];
+      const fitnessData = { 
+        userID: data.userID,
+        planID: data.planID,
+        workout: data.workout,
+        type: data.type,
+        weight: data.weight,
+        sets: data.sets,
+        reps: data.reps,
+        distance: data.distance,
+        time: data.time
+      }
+      setShowModal(true);
+      setDayToCopy(props.days[0]._id);
+      setFitnessToCopy(fitnessData);
+    } else {
+      setShowModal(false);
+    }
+  }
+
+  const handleDayToCopyChange = e => {
+    setDayToCopy(e.target.value);
   }
 
   return (
@@ -29,6 +59,16 @@ function Fitness(props) {
               onClick={props.handleSetFitness}
             >
               {fitness.workout}
+              <Button
+                name="showModalBtn"
+                variant="primary"
+                size="sm"
+                className="mx-2" 
+                value={index}
+                onClick={handleShowModal}
+              >
+                Copy Workout
+              </Button>
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey={fitness._id}>
@@ -88,7 +128,7 @@ function Fitness(props) {
                     />
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label>Distance (km)</Form.Label>
+                    <Form.Label>Distance (m)</Form.Label>
                     <Form.Control
                       name="distance"
                       type="text"
@@ -208,7 +248,7 @@ function Fitness(props) {
                 />
                 </Form.Group>
                 <Form.Group>
-                  <Form.Label>Distance (km)</Form.Label>
+                  <Form.Label>Distance (m)</Form.Label>
                   <Form.Control
                     name="distance"
                     type="text" 
@@ -241,6 +281,31 @@ function Fitness(props) {
           </Accordion.Collapse>
         </Card>
       </Accordion>
+
+      <Modal show={showModal} onHide={handleShowModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>{fitnessToCopy.workout}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <label>Select the Day to Copy this Workout</label><br/>
+          <select id="days" onChange={handleDayToCopyChange}>
+            {props.days.map(day => (
+              <option key={day._id} value={day._id}>Day: {day.day}</option>
+            ))}
+          </select>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="primary" 
+            onClick={() => {props.handleCopyFitness(dayToCopy, fitnessToCopy); handleShowModal();}}
+          >
+            Copy
+          </Button>
+          <Button variant="secondary" onClick={handleShowModal}>
+            Candel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
