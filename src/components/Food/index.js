@@ -1,11 +1,38 @@
-import React from "react";
-import { Accordion, Card, Button, Form } from "react-bootstrap";
+import React, { useState } from "react";
+import { Accordion, Card, Button, Form, Modal } from "react-bootstrap";
 
 function Food(props) {
+  const [showModal, setShowModal] = useState(false);
+  const [foodToCopy, setFoodToCopy] = useState({});
+  const [dayToCopy, setDayToCopy] = useState();
+
+  const handleShowModal = e => {
+    if(showModal === false) {
+      const index = e.target.value;
+      const data = props.foods[index];
+      const foodData = { 
+        userID: data.userID,
+        planID: data.planID,
+        item: data.item,
+        calories: data.calories,
+        price: data.price
+      }
+      setShowModal(true);
+      setDayToCopy(props.days[0]._id);
+      setFoodToCopy(foodData);
+    } else {
+      setShowModal(false);
+    }
+  }
+
+  const handleDayToCopyChange = e => {
+    setDayToCopy(e.target.value);
+  }
+
   return (
     <div>
       <Accordion>
-      {props.foods.map(food => 
+      {props.foods.map((food, index) => 
         <Card key={food._id}>
           <Card.Header>
             <Accordion.Toggle
@@ -16,6 +43,16 @@ function Food(props) {
               onClick={props.handleSetFood}
             >
               {food.item}
+              <Button
+                name="showModalBtn"
+                variant="primary"
+                size="sm"
+                className="mx-2" 
+                value={index}
+                onClick={handleShowModal}
+              >
+                Copy
+              </Button>
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey={food._id}>
@@ -133,6 +170,31 @@ function Food(props) {
           </Accordion.Collapse>
         </Card>
       </Accordion>
+
+      <Modal show={showModal} onHide={handleShowModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>{foodToCopy.item}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <label>Select the Day to Copy this Food</label><br/>
+          <select id="days" onChange={handleDayToCopyChange}>
+            {props.days.map(day => (
+              <option key={day._id} value={day._id}>Day: {day.day}</option>
+            ))}
+          </select>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="primary" 
+            onClick={() => {props.handleCopyFood(dayToCopy, foodToCopy); handleShowModal();}}
+          >
+            Copy
+          </Button>
+          <Button variant="secondary" onClick={handleShowModal}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
