@@ -42,7 +42,8 @@ function EverythingTracker(props) {
   const [fitnessState, setFitnessState] = useSetState(previousFitness);
   const [foodState, setFoodState] = useSetState(previousFood);
   const [plans, setPlans] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [showFitnessModal, setShowFitnessModal] = useState(false);
+  const [showFoodModal, setShowFoodModal] = useState(false);
   const [dayToCopy, setDayToCopy] = useState();
 
   // Call setPlanID when props.plans are passed (beginning).
@@ -494,6 +495,24 @@ function EverythingTracker(props) {
     }
   }
 
+  const handleCopyFood = (dayToCopy, data) => {
+    const foodData = {...data, dayID: dayToCopy};
+    createFood(foodData);
+  }
+
+  const handleCopyFoodList = e => {
+    foods.forEach(food => {
+      const foodData = { 
+        userID: food.userID,
+        planID: food.planID,
+        item: food.item,
+        calories: food.calories,
+        price: food.price
+      }
+      handleCopyFood(dayToCopy, foodData);
+    })
+  }
+
   const handleDeleteFood = e => {
     // e.preventDefault();
     const foodID = e.target.value;
@@ -504,11 +523,21 @@ function EverythingTracker(props) {
     setFoodState(initialFoodState);
   }
 
-  const handleShowModal = e => {
-    if(showModal === false) {
-      setShowModal(true);
+  const handleShowFitnessModal = e => {
+    if(showFitnessModal === false) {
+      setShowFitnessModal(true);
+      setDayToCopy(days[0]._id);
     } else {
-      setShowModal(false);
+      setShowFitnessModal(false);
+    }
+  }
+
+  const handleShowFoodModal = e => {
+    if(showFoodModal === false) {
+      setShowFoodModal(true);
+      setDayToCopy(days[0]._id);
+    } else {
+      setShowFoodModal(false);
     }
   }
 
@@ -576,12 +605,12 @@ function EverythingTracker(props) {
                     Fitnesses
                     {fitnesses.length > 0 ?
                       <Button
-                        name="showModalBtn"
+                        name="showFitnessModalBtn"
                         variant="primary"
                         size="sm"
                         className="mx-2" 
                         value={dayID}
-                        onClick={handleShowModal}
+                        onClick={handleShowFitnessModal}
                       >
                         Copy
                       </Button>
@@ -607,15 +636,30 @@ function EverythingTracker(props) {
                 <Card.Header>
                   <Accordion.Toggle as={Button} variant="link" eventKey="1">
                     Foods
+                    {foods.length > 0 ?
+                      <Button
+                        name="showFoodModalBtn"
+                        variant="primary"
+                        size="sm"
+                        className="mx-2" 
+                        value={dayID}
+                        onClick={handleShowFoodModal}
+                      >
+                        Copy
+                      </Button>
+                    : null
+                    }
                   </Accordion.Toggle>
                 </Card.Header>
                 <Accordion.Collapse eventKey="1">
                   <Card.Body>
                     <Food
                       foods={foods}
+                      days={days}
                       handleSetFood={handleSetFood}
                       handleFoodEntry={handleFoodEntry}
                       handleSaveFood={handleSaveFood}
+                      handleCopyFood={handleCopyFood}
                       handleDeleteFood={handleDeleteFood}
                     />
                   </Card.Body>
@@ -628,14 +672,14 @@ function EverythingTracker(props) {
         </Card>
       </div>
 
-      <Modal show={showModal} onHide={handleShowModal}>
+      <Modal show={showFitnessModal} onHide={handleShowFitnessModal}>
         <Modal.Header closeButton>
           <Modal.Title>Fitnesses</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ListGroup>
           {fitnesses.map(fitness => (
-            <ListGroup.Item>{fitness.workout}</ListGroup.Item>
+            <ListGroup.Item key={fitness._id}>{fitness.workout}</ListGroup.Item>
           ))}
           </ListGroup>
           <label>Select the Day to Copy the Fitnesses</label><br/>
@@ -648,12 +692,42 @@ function EverythingTracker(props) {
         <Modal.Footer>
           <Button 
             variant="primary" 
-            onClick={() => {handleCopyFitnessList(); handleShowModal();}}
+            onClick={() => {handleCopyFitnessList(); handleShowFitnessModal();}}
           >
             Copy
           </Button>
-          <Button variant="secondary" onClick={handleShowModal}>
-            Candel
+          <Button variant="secondary" onClick={handleShowFitnessModal}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showFoodModal} onHide={handleShowFoodModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Foods</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ListGroup>
+          {foods.map(food => (
+            <ListGroup.Item key={food._id}>{food.item}</ListGroup.Item>
+          ))}
+          </ListGroup>
+          <label>Select the Day to Copy the Foods</label><br/>
+          <select id="days" onChange={handleDayToCopyChange}>
+            {days.map(day => (
+              <option key={day._id} value={day._id}>Day: {day.day}</option>
+            ))}
+          </select>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="primary" 
+            onClick={() => {handleCopyFoodList(); handleShowFoodModal();}}
+          >
+            Copy
+          </Button>
+          <Button variant="secondary" onClick={handleShowFoodModal}>
+            Cancel
           </Button>
         </Modal.Footer>
       </Modal>

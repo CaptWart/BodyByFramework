@@ -67,7 +67,7 @@ function Fitness(props) {
                 value={index}
                 onClick={handleShowModal}
               >
-                Copy Workout
+                Copy
               </Button>
             </Accordion.Toggle>
           </Card.Header>
@@ -302,7 +302,7 @@ function Fitness(props) {
             Copy
           </Button>
           <Button variant="secondary" onClick={handleShowModal}>
-            Candel
+            Cancel
           </Button>
         </Modal.Footer>
       </Modal>

@@ -80,7 +80,7 @@ function Dashboard(props) {
       totalPrice = prices.reduce((acc, cur) => acc + cur);
     }
     setTotalCalories(totalCal);
-    setTotalMoneySpent(totalPrice);
+    setTotalMoneySpent(totalPrice.toFixed(2));
   }
 
   const createXYChartData = data => {
@@ -264,7 +264,8 @@ function Dashboard(props) {
     series.alignLabels = false;
 
     let grouper = series.plugins.push(new am4plugins_sliceGrouper.SliceGrouper());
-    grouper.threshold = 5;
+    // grouper.threshold = 5;
+    grouper.threshold = 3;
     grouper.groupName = "Other";
     grouper.clickBehavior = "break";
 
@@ -321,7 +322,8 @@ function Dashboard(props) {
     series.alignLabels = true;
 
     let grouper = series.plugins.push(new am4plugins_sliceGrouper.SliceGrouper());
-    grouper.threshold = 10;
+    // grouper.threshold = 10;
+    grouper.threshold = 5;
     grouper.groupName = "Other";
     grouper.clickBehavior = "break";
   }
