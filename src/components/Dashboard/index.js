@@ -262,6 +262,7 @@ function Dashboard(props) {
     series.dataFields.value = "value";
     series.dataFields.category = "name";
     series.alignLabels = false;
+    series.align = "left";
 
     let grouper = series.plugins.push(new am4plugins_sliceGrouper.SliceGrouper());
     // grouper.threshold = 5;
