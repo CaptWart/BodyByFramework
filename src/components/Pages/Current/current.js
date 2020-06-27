@@ -9,7 +9,7 @@ export function Current() {
 
     React.useEffect(function effectFunction() {
         async function fetchUser() {
-            const response = await fetch('http://ec2-54-163-74-245.compute-1.amazonaws.com/current', { method: "GET", credentials: 'include' })
+            const response = await fetch('https://bodybyframework.com/api/current', { method: "GET", credentials: 'include' })
             if(!response || response.status === 500 || response.status === 401){
                 window.location.href = "/login";
             }

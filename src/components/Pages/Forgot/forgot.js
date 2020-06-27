@@ -10,7 +10,7 @@ export function Forgot() {
   headers.append('Content-Type', 'application/json');
   headers.append('Accept', 'application/json');
 
-    fetch('http://ec2-54-163-74-245.compute-1.amazonaws.com/sendPasswordReset', {
+    fetch('https://bodybyframework.com/api/sendPasswordReset', {
       method: 'POST',
       credentials: "include",
       headers: headers,

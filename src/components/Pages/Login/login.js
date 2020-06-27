@@ -14,7 +14,7 @@ export function Login(props) {
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
 
-    fetch('http://ec2-54-163-74-245.compute-1.amazonaws.com/login', {
+    fetch('https://bodybyframework.com/api/login', {
       method: 'POST',
       mode: 'cors',
       redirect: 'follow',
