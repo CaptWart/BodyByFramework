@@ -1,5 +1,4 @@
-# BBF (Body By Framework)
-A music event search app using the Tcketmaster API and Google Map Javascript API.
+# BBF (Body By Framework) - Front-End
 
 ### Table of Contents
 * General Info
